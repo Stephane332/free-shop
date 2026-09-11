@@ -1,0 +1,1714 @@
+<title>Cabine Faso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --bg:#E7EAEF; --surface:#FFFFFF; --surface-2:#F1F3F7; --surface-3:#E4E8EE;
+  --text:#131820; --muted:#5B6574; --faint:#8B95A3; --line:#D2D8E1; --line-strong:#B9C2CE;
+  --accent:#B87516; --accent-ink:#FFFFFF; --accent-soft:#F3E3C6; --accent-line:#E2C68E;
+  --indigo:#26456C; --indigo-soft:#DCE4EF;
+  --tight:#B4472F; --tight-bg:#F7E2DC;
+  --good:#3F7A4E;  --good-bg:#DDEDE0;
+  --loose:#3D6F92; --loose-bg:#DCE9F2;
+  --stage-1:#0D1116; --stage-2:#1B222C;
+  --r-s:6px; --r-m:10px; --r-l:16px;
+  --shadow:0 1px 2px rgba(16,22,32,.06), 0 6px 18px -8px rgba(16,22,32,.18);
+  color-scheme:light dark;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F131A; --surface:#161C25; --surface-2:#1D242F; --surface-3:#262F3C;
+    --text:#E6EBF2; --muted:#96A1B1; --faint:#6B7686; --line:#2A3240; --line-strong:#3A4553;
+    --accent:#DDA23C; --accent-ink:#1A1205; --accent-soft:#3A2E16; --accent-line:#5C4720;
+    --indigo:#7FA6D8; --indigo-soft:#1E2A3A;
+    --tight:#E0806A; --tight-bg:#3A211A;
+    --good:#77BA88;  --good-bg:#1C2E21;
+    --loose:#7FB0D4; --loose-bg:#182837;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -10px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F131A; --surface:#161C25; --surface-2:#1D242F; --surface-3:#262F3C;
+  --text:#E6EBF2; --muted:#96A1B1; --faint:#6B7686; --line:#2A3240; --line-strong:#3A4553;
+  --accent:#DDA23C; --accent-ink:#1A1205; --accent-soft:#3A2E16; --accent-line:#5C4720;
+  --indigo:#7FA6D8; --indigo-soft:#1E2A3A;
+  --tight:#E0806A; --tight-bg:#3A211A;
+  --good:#77BA88;  --good-bg:#1C2E21;
+  --loose:#7FB0D4; --loose-bg:#182837;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -10px rgba(0,0,0,.6);
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--bg); color:var(--text);
+  font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:15px; line-height:1.5; -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:"Bricolage Grotesque","IBM Plex Sans",system-ui,sans-serif;font-weight:800;text-wrap:balance;margin:0;letter-spacing:-.015em}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+
+/* ---------- shell ---------- */
+.shell{max-width:1360px;margin:0 auto;padding-inline:16px;padding-block:18px 40px}
+.masthead{display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap;justify-content:space-between;margin-bottom:16px}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.sigil{width:38px;height:38px;flex:none;border-radius:9px;background:var(--indigo);position:relative;overflow:hidden}
+.sigil i{position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 4px,var(--accent) 4px 6px,transparent 6px 11px,#D9DEE6 11px 12px);opacity:.85}
+.brand h1{font-size:20px;line-height:1.15}
+.brand p{margin:2px 0 0;font-size:12.5px;color:var(--muted)}
+.mast-right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.tagbit{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:100px;padding:4px 10px;background:var(--surface)}
+
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 392px;gap:18px;align-items:start}
+@media (max-width:1080px){.layout{grid-template-columns:1fr}}
+
+/* ---------- stage ---------- */
+.stage{
+  position:relative;border-radius:var(--r-l);overflow:hidden;
+  background:radial-gradient(120% 90% at 50% 12%,var(--stage-2) 0%,var(--stage-1) 70%);
+  border:1px solid var(--line);min-height:520px;height:min(78vh,760px);
+  box-shadow:var(--shadow);
+}
+@media (max-width:1080px){.stage{height:min(62vh,540px);min-height:420px}}
+.stage canvas{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
+.stage canvas:active{cursor:grabbing}
+.hud{position:absolute;inset:0;pointer-events:none;padding:14px;display:flex;flex-direction:column;justify-content:space-between}
+.hud-row{display:flex;gap:10px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+.chip{
+  pointer-events:auto;background:rgba(12,16,22,.72);backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.14);color:#EEF2F7;border-radius:100px;
+  padding:6px 12px;font-size:12px;display:inline-flex;gap:8px;align-items:center
+}
+.chip b{font-family:"IBM Plex Mono",monospace;font-weight:600;color:#fff}
+.verdict{
+  pointer-events:auto;background:rgba(12,16,22,.74);backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:10px 13px;color:#EEF2F7;max-width:230px
+}
+.verdict .lab{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#9EA9B8}
+.verdict .big{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:30px;line-height:1;margin:3px 0 5px;color:#fff}
+.verdict .sub{font-size:11.5px;color:#B6C0CD;line-height:1.35}
+.conf{height:4px;border-radius:100px;background:rgba(255,255,255,.16);margin-top:7px;overflow:hidden}
+.conf i{display:block;height:100%;background:var(--accent);border-radius:100px;transition:width .35s ease}
+.legend{display:flex;gap:6px;flex-wrap:wrap}
+.legend span{pointer-events:auto;font-size:11px;color:#D8DEE7;background:rgba(12,16,22,.72);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12);border-radius:100px;padding:4px 9px;display:inline-flex;gap:6px;align-items:center}
+.legend span::before{content:"";width:8px;height:8px;border-radius:2px;background:currentColor}
+.legend .l-t{color:#E0806A}.legend .l-g{color:#7FBF90}.legend .l-l{color:#7FB0D4}
+.viewbar{display:flex;gap:0;pointer-events:auto;background:rgba(12,16,22,.72);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.14);border-radius:100px;padding:3px}
+.viewbar button{
+  background:none;border:0;color:#B6C0CD;font:inherit;font-size:12px;padding:5px 12px;border-radius:100px;cursor:pointer
+}
+.viewbar button[aria-pressed="true"]{background:var(--accent);color:#16120A;font-weight:600}
+.viewbar button:focus-visible{outline:2px solid #fff;outline-offset:1px}
+
+/* ---------- rail ---------- */
+.rail{display:flex;flex-direction:column;gap:14px;min-width:0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-l);box-shadow:var(--shadow)}
+.card-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 15px 0}
+.card-h h2{font-size:13px;letter-spacing:.09em;text-transform:uppercase;font-weight:600;font-family:"IBM Plex Sans",sans-serif;color:var(--muted)}
+.card-b{padding:13px 15px 15px;display:flex;flex-direction:column;gap:13px}
+
+.tabs{display:flex;gap:2px;background:var(--surface-2);border:1px solid var(--line);border-radius:100px;padding:3px}
+.tabs button{flex:1;background:none;border:0;font:inherit;font-size:12.5px;font-weight:500;color:var(--muted);padding:7px 4px;border-radius:100px;cursor:pointer;white-space:nowrap}
+.tabs button[aria-selected="true"]{background:var(--surface);color:var(--text);font-weight:600;box-shadow:0 1px 2px rgba(16,22,32,.1)}
+.tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+[hidden]{display:none !important}
+
+.field{display:flex;flex-direction:column;gap:5px}
+.field-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.field label{font-size:12.5px;font-weight:500}
+.field .val{font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:600;color:var(--accent)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:20px;background:none;cursor:pointer;margin:0}
+input[type=range]::-webkit-slider-runnable-track{height:5px;border-radius:100px;background:var(--surface-3)}
+input[type=range]::-moz-range-track{height:5px;border-radius:100px;background:var(--surface-3)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:17px;height:17px;border-radius:50%;background:var(--accent);border:2px solid var(--surface);margin-top:-6px;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+input[type=range]::-moz-range-thumb{width:17px;height:17px;border:2px solid var(--surface);border-radius:50%;background:var(--accent);box-shadow:0 1px 3px rgba(0,0,0,.3)}
+input[type=range]:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:100px}
+
+.note{font-size:12px;color:var(--muted);line-height:1.45}
+.note b{color:var(--text);font-weight:600}
+.callout{background:var(--surface-2);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:var(--r-s);padding:9px 11px;font-size:12px;color:var(--muted);line-height:1.45}
+.callout b{color:var(--text)}
+
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.mfield{display:flex;flex-direction:column;gap:4px}
+.mfield label{font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;align-items:center;gap:5px}
+.mfield input[type=number]{
+  font-family:"IBM Plex Mono",monospace;font-size:14px;font-weight:500;
+  background:var(--surface-2);border:1px solid var(--line);color:var(--text);
+  border-radius:var(--r-s);padding:7px 9px;width:100%
+}
+.mfield input[type=number]:focus{outline:2px solid var(--accent);outline-offset:-1px;border-color:var(--accent)}
+.est{font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);border:1px solid var(--accent-line);border-radius:100px;padding:1px 6px;font-weight:600}
+.est[data-state="mesure"]{color:var(--good);background:var(--good-bg);border-color:var(--good)}
+
+.btn{
+  font:inherit;font-size:13px;font-weight:600;border-radius:var(--r-s);padding:9px 13px;cursor:pointer;
+  border:1px solid var(--line-strong);background:var(--surface-2);color:var(--text);
+}
+.btn:hover{background:var(--surface-3)}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn-a{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn-a:hover{filter:brightness(1.06);background:var(--accent)}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap}
+.btn-row .btn{flex:1;min-width:120px}
+
+/* ---------- catalogue ---------- */
+.slot{border-top:1px solid var(--line);padding-top:12px}
+.slot:first-child{border-top:0;padding-top:0}
+.slot-h{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--faint);margin-bottom:8px;font-weight:600}
+.items{display:flex;flex-direction:column;gap:6px}
+.item{
+  display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:10px;align-items:center;
+  border:1px solid var(--line);background:var(--surface-2);border-radius:var(--r-m);padding:8px 10px;cursor:pointer;text-align:left;font:inherit;width:100%
+}
+.item:hover{border-color:var(--line-strong)}
+.item[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);box-shadow:inset 0 0 0 1px var(--accent)}
+.item:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.sw{width:34px;height:34px;border-radius:7px;border:1px solid rgba(0,0,0,.18);flex:none}
+.item .nm{font-size:13px;font-weight:600;line-height:1.25;overflow-wrap:anywhere}
+.item .mt{font-size:11px;color:var(--muted);margin-top:1px}
+.item .pr{font-family:"IBM Plex Mono",monospace;font-size:12.5px;font-weight:600;white-space:nowrap;text-align:right}
+.item .pr small{display:block;font-size:10px;color:var(--muted);font-weight:400}
+
+.fabrics{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.fab{width:30px;height:30px;border-radius:7px;border:2px solid transparent;cursor:pointer;padding:0;background-size:cover;box-shadow:inset 0 0 0 1px rgba(0,0,0,.2)}
+.fab[aria-pressed="true"]{border-color:var(--accent)}
+.fab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.sizes{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}
+.sz{
+  font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;min-width:40px;
+  border:1px solid var(--line);background:var(--surface-2);color:var(--text);
+  border-radius:var(--r-s);padding:6px 8px;cursor:pointer;position:relative
+}
+.sz[aria-pressed="true"]{background:var(--text);color:var(--bg);border-color:var(--text)}
+.sz[data-reco="1"]::after{content:"";position:absolute;top:-3px;right:-3px;width:7px;height:7px;border-radius:50%;background:var(--accent);border:1.5px solid var(--surface)}
+.sz:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* ---------- fit report ---------- */
+.zone{display:grid;grid-template-columns:78px minmax(0,1fr) 62px;gap:9px;align-items:center;padding:6px 0;border-top:1px dotted var(--line)}
+.zone:first-of-type{border-top:0}
+.zone .zn{font-size:12px;font-weight:500}
+.zone .zv{font-family:"IBM Plex Mono",monospace;font-size:11.5px;text-align:right;font-weight:500}
+.bar{position:relative;height:16px;border-radius:var(--r-s);background:var(--surface-3);overflow:hidden}
+.bar .ok{position:absolute;top:0;bottom:0;background:var(--good-bg);border-left:1px solid var(--good);border-right:1px solid var(--good)}
+.bar .pin{position:absolute;top:1px;bottom:1px;width:3px;border-radius:2px;background:var(--text);transition:left .3s ease}
+.bar .pin[data-s="t"]{background:var(--tight)}
+.bar .pin[data-s="g"]{background:var(--good)}
+.bar .pin[data-s="l"]{background:var(--loose)}
+.tagline{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;border-radius:100px;padding:2px 8px}
+.tg-t{color:var(--tight);background:var(--tight-bg)}
+.tg-g{color:var(--good);background:var(--good-bg)}
+.tg-l{color:var(--loose);background:var(--loose-bg)}
+
+table.grid{width:100%;border-collapse:collapse;font-size:12px}
+table.grid th,table.grid td{padding:6px 7px;text-align:right;border-bottom:1px solid var(--line)}
+table.grid th:first-child,table.grid td:first-child{text-align:left}
+table.grid th{font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--faint);font-weight:600}
+table.grid td{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
+table.grid tr[data-reco="1"] td{background:var(--accent-soft);font-weight:600}
+table.grid td:first-child{font-family:"IBM Plex Sans",sans-serif}
+.tblwrap{overflow-x:auto}
+
+/* ---------- négo ---------- */
+.receipt{display:flex;flex-direction:column;gap:5px;font-size:13px}
+.rline{display:flex;justify-content:space-between;gap:12px}
+.rline span:last-child{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;font-weight:500;white-space:nowrap}
+.rline.disc{color:var(--good)}
+.rline.tot{border-top:1px solid var(--line-strong);padding-top:7px;margin-top:3px;font-weight:700;font-size:15px}
+.rline.tot span:last-child{font-weight:700}
+.chatlog{display:flex;flex-direction:column;gap:7px;max-height:190px;overflow-y:auto;padding-right:2px}
+.bub{border-radius:12px;padding:8px 11px;font-size:12.5px;line-height:1.4;max-width:88%}
+.bub.me{align-self:flex-end;background:var(--indigo);color:#fff;border-bottom-right-radius:3px}
+.bub.shop{align-self:flex-start;background:var(--surface-3);border-bottom-left-radius:3px}
+.bub.sys{align-self:center;background:none;color:var(--faint);font-size:11px;text-align:center;padding:2px}
+.bub b{font-family:"IBM Plex Mono",monospace}
+.offerbox{display:flex;gap:7px;align-items:stretch}
+.offerbox input{
+  flex:1;min-width:0;font-family:"IBM Plex Mono",monospace;font-size:14px;font-weight:600;
+  background:var(--surface-2);border:1px solid var(--line);color:var(--text);border-radius:var(--r-s);padding:9px 10px
+}
+.offerbox input:focus{outline:2px solid var(--accent);outline-offset:-1px}
+.seg{display:flex;gap:3px;background:var(--surface-2);border:1px solid var(--line);border-radius:100px;padding:3px}
+.seg button{flex:1;background:none;border:0;font:inherit;font-size:11.5px;color:var(--muted);padding:5px 8px;border-radius:100px;cursor:pointer;white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--text);color:var(--bg);font-weight:600}
+.seg button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+
+.foot{margin-top:26px;padding-top:16px;border-top:1px solid var(--line);font-size:12px;color:var(--muted);line-height:1.55;max-width:70ch}
+.foot b{color:var(--text)}
+.foot code{font-family:"IBM Plex Mono",monospace;font-size:11.5px;background:var(--surface-2);border:1px solid var(--line);border-radius:4px;padding:1px 5px}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms !important;transition-duration:.01ms !important}}
+</style>
+
+<div class="shell">
+  <header class="masthead">
+    <div class="brand">
+      <div class="sigil"><i></i></div>
+      <div>
+        <h1>Cabine Faso</h1>
+        <p>Essayage 3D sur maillage anatomique réel — boutique homme, Ouagadougou</p>
+      </div>
+    </div>
+    <div class="mast-right">
+      <span class="tagbit">Maillage anatomique</span>
+      <span class="tagbit">Moteur de taille</span>
+      <span class="tagbit">Marchandage</span>
+    </div>
+  </header>
+
+  <div class="layout">
+    <!-- ================= SCÈNE ================= -->
+    <div class="stage" id="stage">
+      <canvas id="cv" aria-label="Mannequin 3D habillé, tournant sur lui-même"></canvas>
+      <div class="hud">
+        <div class="hud-row">
+          <div class="viewbar" role="group" aria-label="Mode d'affichage">
+            <button type="button" id="mode-rendu" aria-pressed="true">Rendu</button>
+            <button type="button" id="mode-fit" aria-pressed="false">Ajustement</button>
+            <button type="button" id="mode-nu" aria-pressed="false">Morpho</button>
+          </div>
+          <div class="verdict" id="verdict">
+            <div class="lab">Taille conseillée</div>
+            <div class="big" id="v-size">L</div>
+            <div class="sub" id="v-sub">Chemise Faso Dan Fani</div>
+            <div class="conf"><i id="v-conf" style="width:62%"></i></div>
+            <div class="sub" style="margin-top:5px" id="v-conf-txt">Confiance 62 % — estimée sur taille/poids</div>
+          </div>
+        </div>
+        <div class="hud-row" style="align-items:flex-end">
+          <div class="legend" id="legend" hidden>
+            <span class="l-t">Serré</span><span class="l-g">Bien</span><span class="l-l">Ample</span>
+          </div>
+          <div class="chip"><span id="chip-body">178 cm · 74 kg</span> · <b id="chip-chest">98 cm</b></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= PANNEAU ================= -->
+    <div class="rail">
+      <div class="tabs" role="tablist" aria-label="Sections">
+        <button type="button" role="tab" id="tab-morpho" aria-selected="true" aria-controls="p-morpho">Morphologie</button>
+        <button type="button" role="tab" id="tab-tenue" aria-selected="false" aria-controls="p-tenue">Tenue</button>
+        <button type="button" role="tab" id="tab-fit" aria-selected="false" aria-controls="p-fit">Ajustement</button>
+        <button type="button" role="tab" id="tab-prix" aria-selected="false" aria-controls="p-prix">Prix</button>
+      </div>
+
+      <!-- MORPHO -->
+      <section class="card" id="p-morpho" role="tabpanel" aria-labelledby="tab-morpho">
+        <div class="card-h"><h2>Le client</h2></div>
+        <div class="card-b">
+          <div class="field">
+            <div class="field-top"><label for="r-h">Taille</label><span class="val mono" id="o-h">178 cm</span></div>
+            <input type="range" id="r-h" min="150" max="205" step="1" value="178">
+          </div>
+          <div class="field">
+            <div class="field-top"><label for="r-w">Poids</label><span class="val mono" id="o-w">74 kg</span></div>
+            <input type="range" id="r-w" min="42" max="140" step="1" value="74">
+          </div>
+          <div class="callout">
+            Avec ces deux chiffres seuls, le moteur <b>estime</b> les 8 mesures du corps. C'est déjà suffisant pour trancher entre deux tailles — pas pour garantir. Chaque mesure réelle saisie ci-dessous remplace une estimation et fait monter la confiance.
+          </div>
+          <div>
+            <div class="slot-h">Mesures du corps <span style="text-transform:none;letter-spacing:0">(cm)</span></div>
+            <div class="mgrid" id="mgrid"></div>
+          </div>
+          <div class="btn-row">
+            <button type="button" class="btn" id="btn-reset-m">Tout ré-estimer</button>
+            <button type="button" class="btn" id="btn-tshirt">Méthode du t-shirt</button>
+          </div>
+          <div class="callout" id="tshirt-help" hidden>
+            <b>Personne ne connaît sa taille. Tout le monde a un t-shirt qui lui va.</b><br>
+            Pose à plat le haut que tu portes le mieux. Mesure la largeur d'une couture d'aisselle à l'autre, multiplie par 2 : c'est ton tour de poitrine habillé. Retire 12 cm d'aisance moyenne → saisis le résultat dans « Poitrine ». Une mesure, 30 secondes, aucun mètre-ruban autour du corps.
+          </div>
+        </div>
+      </section>
+
+      <!-- TENUE -->
+      <section class="card" id="p-tenue" role="tabpanel" aria-labelledby="tab-tenue" hidden>
+        <div class="card-h"><h2>Le stock</h2><span class="note" id="stock-count"></span></div>
+        <div class="card-b" id="catalogue"></div>
+      </section>
+
+      <!-- FIT -->
+      <section class="card" id="p-fit" role="tabpanel" aria-labelledby="tab-fit" hidden>
+        <div class="card-h"><h2>Rapport d'ajustement</h2></div>
+        <div class="card-b" id="fitpanel"></div>
+      </section>
+
+      <!-- PRIX -->
+      <section class="card" id="p-prix" role="tabpanel" aria-labelledby="tab-prix" hidden>
+        <div class="card-h"><h2>Panier &amp; marchandage</h2></div>
+        <div class="card-b">
+          <div class="receipt" id="receipt"></div>
+          <div>
+            <div class="slot-h">Humeur du patron</div>
+            <div class="seg" role="group" aria-label="Style de négociation">
+              <button type="button" data-style="dur" aria-pressed="false">Dur</button>
+              <button type="button" data-style="normal" aria-pressed="true">Normal</button>
+              <button type="button" data-style="souple" aria-pressed="false">Souple</button>
+            </div>
+            <p class="note" style="margin:7px 0 0">Le commerçant règle son <b>prix plancher</b> une fois. Le client ne le voit jamais. L'app négocie à sa place, 24 h/24, et ne descend jamais en dessous.</p>
+          </div>
+          <div class="chatlog" id="chatlog"></div>
+          <div class="offerbox">
+            <input type="text" inputmode="numeric" id="offer" placeholder="Ton prix en FCFA" aria-label="Ton offre en FCFA">
+            <button type="button" class="btn btn-a" id="btn-offer">Proposer</button>
+          </div>
+          <div class="btn-row">
+            <button type="button" class="btn" id="btn-last">C'est combien ton dernier prix ?</button>
+            <button type="button" class="btn" id="btn-wa">Parler au patron</button>
+          </div>
+          <div>
+            <div class="slot-h">Livraison</div>
+            <div class="items" id="delivery"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <p class="foot">
+    <b>Ce qui est réel ici :</b> le mannequin est un <b>vrai maillage anatomique</b> — 13 380 sommets, dérivé de la base MakeHuman (licence CC0, <code>316 ko</code>) — déformé sommet par sommet pour atteindre les mesures du client. Ses mensurations de départ ont été relevées en tranchant le maillage : poitrine 81,3, ceinture 67,4, bassin 95,6 pour 166,6 cm de stature. Les vêtements sont bâtis sur le profil de ce corps déformé, avec l'aisance réelle de chaque taille, et la recommandation vient de la comparaison <b>mesures du vêtement à plat × mesures du corps</b>. <b>Ce qui reste à faire :</b> la base est androgyne et penche encore féminin malgré le morph — il faudra une vraie cible de morphologie masculine. Le stock, les textures et les prix sont simulés ; en production chaque référence porte la photo du vêtement à plat et 4 mesures prises par le commerçant.
+  </p>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+"use strict";
+var T = window.THREE;
+
+/* ==========================================================================
+   1. ANTHROPOMÉTRIE — de 2 chiffres connus vers 8 mesures utiles
+   Régressions calées sur des repères adultes masculins. En production elles
+   sont remplacées par une régression ajustée sur les clients réellement
+   mesurés en boutique (cf. docs/02-moteur-de-taille.md).
+   ========================================================================== */
+var MKEYS = [
+  {k:"poitrine", nom:"Poitrine", min:70,  max:150},
+  {k:"ceinture", nom:"Ceinture", min:58,  max:150},
+  {k:"bassin",   nom:"Bassin",   min:70,  max:150},
+  {k:"epaules",  nom:"Épaules",  min:34,  max:58},
+  {k:"cou",      nom:"Cou",      min:30,  max:52},
+  {k:"manche",   nom:"Manche",   min:45,  max:75},
+  {k:"entrejambe",nom:"Entrejambe",min:60,max:100},
+  {k:"buste",    nom:"Buste",    min:35,  max:60}
+];
+
+function estimer(h, w){
+  var imc = w / Math.pow(h/100, 2);
+  var d = imc - 22;
+  var poitrine = 0.55*h + 1.9*d - 2.7;
+  return {
+    imc: imc,
+    poitrine: poitrine,
+    ceinture: poitrine - 14 + 0.9*d,
+    bassin:   poitrine + 1.5 - 0.25*d,
+    epaules:  0.255*h + 0.07*(w-70),   // carrure d'épaule à épaule, pas biacromial
+    cou:      0.30*poitrine + 9.5,
+    manche:   0.335*h,
+    entrejambe: 0.45*h,
+    buste:    0.235*h
+  };
+}
+
+/* ==========================================================================
+   2. GÉOMÉTRIE PARAMÉTRIQUE
+   Tout le mannequin est un empilement de sections en super-ellipse, lissées
+   par Catmull-Rom puis cousues en surface. Un vêtement = les mêmes sections,
+   dilatées par l'aisance mesurée. Aucun asset externe.
+   ========================================================================== */
+
+// Périmètre d'ellipse (Ramanujan) → demi-axes, avec correction super-ellipse
+function rayons(circ, k, n){
+  var f = Math.PI * (3*(1+k) - Math.sqrt((3+k)*(1+3*k)));
+  var a = (circ / f) * (1 - 0.055*(n-2));
+  return {rx:a, rz:a*k};
+}
+function superPt(th, rx, rz, n){
+  var c = Math.cos(th), s = Math.sin(th), e = 2/n;
+  return {
+    x: rx * (c<0?-1:1) * Math.pow(Math.abs(c), e),
+    z: rz * (s<0?-1:1) * Math.pow(Math.abs(s), e)
+  };
+}
+// Hermite cubique à tangentes bornées (Fritsch-Carlson). Un Catmull-Rom
+// classique dépasse aux extrema locaux : sur le pic de l'épaule, ça produisait
+// une aile de 3 cm en dehors du corps. Ici la pente est annulée à chaque
+// extremum, donc la surface ne sort jamais de l'enveloppe des sections.
+function pente(dPrev, dNext){
+  if(dPrev*dNext <= 0) return 0;
+  return 2*dPrev*dNext/(dPrev+dNext);
+}
+function mono(va, vb, vc, vd, ya, yb, yc, yd, t){
+  var h = (yc - yb) || 1e-6, d = (vc - vb)/h;
+  var dP = (yb - ya) ? (vb - va)/(yb - ya) : d;
+  var dN = (yd - yc) ? (vd - vc)/(yd - yc) : d;
+  var m0 = pente(dP, d)*h, m1 = pente(d, dN)*h;
+  var t2 = t*t, t3 = t2*t;
+  return (2*t3-3*t2+1)*vb + (t3-2*t2+t)*m0 + (-2*t3+3*t2)*vc + (t3-t2)*m1;
+}
+// Échantillonne la pile de sections à une hauteur y donnée
+function echantillon(keys, y){
+  var i = 0, n = keys.length;
+  while(i < n-2 && keys[i+1].y < y) i++;
+  var a = keys[Math.max(0,i-1)], b = keys[i], c = keys[Math.min(n-1,i+1)], d = keys[Math.min(n-1,i+2)];
+  var t = Math.min(1, Math.max(0, (y - b.y) / ((c.y - b.y) || 1e-6)));
+  var f = function(k){ return mono(a[k], b[k], c[k], d[k], a.y, b.y, c.y, d.y, t); };
+  return {
+    rx: f("rx"), rz: f("rz"), n: f("n"),
+    cx: mono(a.cx||0,b.cx||0,c.cx||0,d.cx||0, a.y,b.y,c.y,d.y, t),
+    cz: mono(a.cz||0,b.cz||0,c.cz||0,d.cz||0, a.y,b.y,c.y,d.y, t)
+  };
+}
+// Construit la surface. zoneAt(y) -> identifiant de zone, utilisé pour la carte d'ajustement.
+function tisser(keys, opt){
+  opt = opt || {};
+  var rings = opt.rings || 44, seg = opt.seg || 46;
+  var y0 = keys[0].y, y1 = keys[keys.length-1].y;
+  var pos = [], uv = [], zid = [], idx = [];
+  for(var r=0; r<=rings; r++){
+    var v = r/rings, y = y0 + (y1-y0)*v;
+    var s = echantillon(keys, y);
+    var z = opt.zoneAt ? opt.zoneAt(y) : 0;
+    for(var c=0; c<=seg; c++){
+      var u = c/seg, p = superPt(u*Math.PI*2, s.rx, s.rz, s.n);
+      pos.push(p.x + s.cx, y, p.z + s.cz);
+      uv.push(u * (opt.uRepeat||1), v * (opt.vRepeat||1));
+      zid.push(z);
+    }
+  }
+  var W = seg+1;
+  for(var r2=0; r2<rings; r2++) for(var c2=0; c2<seg; c2++){
+    var A=r2*W+c2, B=A+1, C=A+W, D=C+1;
+    idx.push(A,C,B, B,C,D);
+  }
+  if(opt.capBas){
+    var ci = pos.length/3; pos.push(0,y0,0); uv.push(.5,0); zid.push(opt.zoneAt?opt.zoneAt(y0):0);
+    for(var c3=0;c3<seg;c3++) idx.push(ci, c3+1, c3);
+  }
+  if(opt.capHaut){
+    var ct = pos.length/3, base = rings*W; pos.push(0,y1,0); uv.push(.5,1); zid.push(opt.zoneAt?opt.zoneAt(y1):0);
+    for(var c4=0;c4<seg;c4++) idx.push(ct, base+c4, base+c4+1);
+  }
+  var g = new T.BufferGeometry();
+  g.setAttribute("position", new T.Float32BufferAttribute(pos,3));
+  g.setAttribute("uv", new T.Float32BufferAttribute(uv,2));
+  g.setAttribute("color", new T.Float32BufferAttribute(new Float32Array(pos.length), 3));
+  g.userData.zid = zid;
+  g.setIndex(idx);
+  g.computeVertexNormals();
+  return g;
+}
+
+/* --- Le corps : un vrai maillage humain, déformé aux mesures --------------
+   On ne fabrique plus le corps, on déforme un maillage anatomique réel
+   (base MakeHuman, CC0, 13 380 sommets — voir assets/SOURCE.md). Le maillage
+   apporte l'anatomie : mains, pieds, visage, topologie. Le moteur de mesure
+   apporte la morphologie du client. Aucun des deux ne sait faire le travail
+   de l'autre.
+   ------------------------------------------------------------------------ */
+var PROFIL=null, POS0=null, NBV=0, geoCorps=null, corpsMesh=null;
+var wBras=null, wJambe=null, proRx=null, proRz=null, proZc=null;
+
+// Lecteur GLB minimal : en-tête 12 o puis chunks JSON / BIN. On ne charge pas
+// GLTFLoader (absent du build three.js principal) pour un seul maillage.
+function lireGLB(buf){
+  var dv = new DataView(buf);
+  if(dv.getUint32(0,true) !== 0x46546C67) throw new Error("fichier GLB invalide");
+  var off = 12, js = null, bin = null;
+  while(off < dv.byteLength){
+    var len = dv.getUint32(off,true), typ = dv.getUint32(off+4,true);
+    var part = buf.slice(off+8, off+8+len);
+    if(typ === 0x4E4F534A) js = JSON.parse(new TextDecoder().decode(part));
+    else if(typ === 0x004E4942) bin = part;
+    off += 8 + len + ((4 - len%4) % 4);
+  }
+  var pr = js.meshes[0].primitives[0];
+  var lire = function(ia, Type, comp){
+    var a = js.accessors[ia], bv = js.bufferViews[a.bufferView];
+    return new Type(bin, bv.byteOffset||0, a.count*comp);
+  };
+  var g = new T.BufferGeometry();
+  g.setAttribute("position", new T.BufferAttribute(lire(pr.attributes.POSITION, Float32Array, 3), 3));
+  g.setIndex(new T.BufferAttribute(lire(pr.indices, Uint16Array, 1), 1));
+  g.computeVertexNormals();
+  return g;
+}
+
+var lisse = function(t){ t = t<0?0:(t>1?1:t); return t*t*(3-2*t); };
+// Périmètre d'ellipse (Ramanujan) — sert à répartir un facteur de mesure
+// entre largeur et profondeur sans fausser le tour.
+function peri(a,b){ return Math.PI*(3*(a+b) - Math.sqrt((3*a+b)*(a+3*b))); }
+
+function proAt(h){
+  var t = PROFIL.profil, u = (h<0?0:(h>0.9999?0.9999:h))/0.005;
+  var i = u|0; if(i > t.length-2) i = t.length-2;
+  var fr = u-i, a = t[i], b = t[i+1];
+  return {c:a[1]+(b[1]-a[1])*fr, rx:a[2]+(b[2]-a[2])*fr,
+          rz:a[3]+(b[3]-a[3])*fr, zc:a[4]+(b[4]-a[4])*fr};
+}
+
+function chargerCorps(){
+  return Promise.all([
+    fetch("assets/mannequin.glb").then(function(r){ return r.arrayBuffer(); }),
+    fetch("assets/profil.json").then(function(r){ return r.json(); })
+  ]).then(function(res){
+    PROFIL = res[1];
+    // Les tranches vides (sommet du crâne, dessous des pieds) sont comblées
+    // par la voisine la plus proche : sinon rayon nul et sommets aspirés.
+    var t = PROFIL.profil;
+    for(var i=1;i<t.length;i++) if(!t[i][2]) { t[i][2]=t[i-1][2]; t[i][3]=t[i-1][3]; t[i][1]=t[i-1][1]; t[i][4]=t[i-1][4]; }
+    for(var j=t.length-2;j>=0;j--) if(!t[j][2]) { t[j][2]=t[j+1][2]; t[j][3]=t[j+1][3]; t[j][1]=t[j+1][1]; t[j][4]=t[j+1][4]; }
+    geoCorps = lireGLB(res[0]);
+    POS0 = Float32Array.from(geoCorps.attributes.position.array);
+    NBV = POS0.length/3;
+    preparerChamps();
+  });
+}
+
+// Poids de membre par sommet, calculés une seule fois : un sommet appartient
+// au bras dans la mesure où il sort latéralement de la silhouette du tronc.
+function preparerChamps(){
+  var H0 = PROFIL.hauteurBase, A = PROFIL.articulations;
+  var yMain = A["l-hand"][1], yEp = A["l-shoulder"][1], yC = PROFIL.yEntrejambe;
+  wBras = new Float32Array(NBV); wJambe = new Float32Array(NBV);
+  proRx = new Float32Array(NBV); proRz = new Float32Array(NBV); proZc = new Float32Array(NBV);
+  for(var i=0;i<NBV;i++){
+    var x = POS0[3*i], y = POS0[3*i+1];
+    var p = proAt(y/H0);
+    proRx[i] = p.rx; proRz[i] = p.rz; proZc[i] = p.zc;
+    var bande = lisse((y - (yMain-14))/12) * lisse(((yEp-1.5) - y)/11);
+    var jb = lisse((yC + 2 - y)/9);
+    var br = bande * lisse((Math.abs(x) - p.rx*0.90)/5.0);
+    if(br + jb > 1) br = 1 - jb;
+    wBras[i] = br < 0 ? 0 : br; wJambe[i] = jb;
+  }
+}
+
+function facteursDe(m){
+  var B = PROFIL.base;
+  return { bassin:m.bassin/B.bassin, ceinture:m.ceinture/B.ceinture,
+           poitrine:m.poitrine/B.poitrine, epaules:m.epaules/B.epaules, cou:m.cou/B.cou };
+}
+// Facteur radial à une hauteur donnée du maillage de base, interpolé entre
+// les repères anatomiques mesurés sur ce maillage.
+function facteurRadial(yb, F){
+  var R = PROFIL.reperes, yC = PROFIL.yEntrejambe, H0 = PROFIL.hauteurBase;
+  var N = FR_N || (FR_N = [
+    [0,          0], [yC*0.55, 0], [yC-2, 0], [R.bassin, 0], [R.ceinture, 0],
+    [R.poitrine, 0], [R.aisselle, 0], [R.epaule, 0], [R.cou, 0], [R.tete, 0], [H0, 0]
+  ]);
+  N[0][1] = 1+(F.bassin-1)*0.45;  N[1][1] = 1+(F.bassin-1)*0.74;
+  N[2][1] = 1+(F.bassin-1)*0.93;  N[3][1] = F.bassin;
+  N[4][1] = F.ceinture;           N[5][1] = F.poitrine;
+  N[6][1] = F.poitrine;           N[7][1] = F.epaules;
+  N[8][1] = F.cou;                N[9][1] = 1+(F.cou-1)*0.30;
+  N[10][1] = 1+(F.cou-1)*0.16;
+  if(yb <= N[0][0]) return N[0][1];
+  for(var i=1;i<N.length;i++) if(yb <= N[i][0]){
+    var t = (yb-N[i-1][0])/((N[i][0]-N[i-1][0])||1);
+    return N[i-1][1] + (N[i][1]-N[i-1][1])*lisse(t);
+  }
+  return N[N.length-1][1];
+}
+var FR_N = null;
+
+// Un bras / une jambe se déplace avec son articulation puis grossit autour de
+// son propre axe — jamais autour de l'axe du corps, sinon les membres partent
+// en biais dès qu'on élargit les épaules.
+function membre(o, x,y,z, Ja, Jb, s, fA, fH, out){
+  var ax=Ja[0]*s, ay=Ja[1], az=Ja[2], bx=Jb[0]*s, by=Jb[1], bz=Jb[2];
+  var dx=bx-ax, dy=by-ay, dz=bz-az, L2=dx*dx+dy*dy+dz*dz || 1;
+  var t = ((x-ax)*dx + (y-ay)*dy + (z-az)*dz)/L2;
+  var cx=ax+t*dx, cy=ay+t*dy, cz=az+t*dz;
+  var ax2=ax*o, ay2=ay*fH, az2=az;
+  var bx2=ax2+dx*fH, by2=ay2+dy*fH, bz2=az2+dz*fH;
+  out[0] = ax2+t*(bx2-ax2) + (x-cx)*fA;
+  out[1] = ay2+t*(by2-ay2) + (y-cy)*fA;
+  out[2] = az2+t*(bz2-az2) + (z-cz)*fA;
+}
+
+var _o = [0,0,0], _p = [0,0,0];
+function deformerCorps(m, H){
+  var H0 = PROFIL.hauteurBase, R = PROFIL.reperes, A = PROFIL.articulations;
+  var fH = H/H0, F = facteursDe(m);
+  var fBras = 1+(F.poitrine-1)*0.82, fJambe = 1+(F.bassin-1)*0.88;
+  var Sh = A["l-shoulder"], Mn = A["l-hand"], Hn = A["l-upper-leg"], Ck = A["l-ankle"];
+  var pos = geoCorps.attributes.position.array;
+  for(var i=0;i<NBV;i++){
+    var x = POS0[3*i], y = POS0[3*i+1], z = POS0[3*i+2];
+    var f = facteurRadial(y, F), zc = proZc[i], rx0 = proRx[i]||1, rz0 = proRz[i]||1;
+    // Le ventre pousse vers l'avant plus que sur les côtés : un homme qui
+    // prend du poids ne devient pas un tonneau. On répartit le facteur entre
+    // largeur et profondeur en conservant le tour exact.
+    var rho = 1;
+    if(f > 1){
+      var wv = lisse(1 - Math.abs(y - R.ceinture)/17);
+      rho = 1 + wv*0.42*Math.min(1, (f-1)*3.2);
+    }
+    var fx = f * peri(rx0, rz0) / peri(rx0, rz0*rho), fz = fx*rho;
+    var px = x*fx, py = y*fH, pz = zc + (z-zc)*fz;
+    var wb = wBras[i], wj = wJambe[i];
+    if(wb > 0.002){
+      membre(F.epaules, x,y,z, Sh, Mn, x<0?-1:1, fBras, fH, _o);
+      px += (_o[0]-px)*wb; py += (_o[1]-py)*wb; pz += (_o[2]-pz)*wb;
+    }
+    if(wj > 0.002){
+      membre(F.bassin, x,y,z, Hn, Ck, x<0?-1:1, fJambe, fH, _p);
+      px += (_p[0]-px)*wj; py += (_p[1]-py)*wj; pz += (_p[2]-pz)*wj;
+    }
+    pos[3*i] = px; pos[3*i+1] = py; pos[3*i+2] = pz;
+  }
+  geoCorps.attributes.position.needsUpdate = true;
+  geoCorps.computeVertexNormals();
+  geoCorps.computeBoundingSphere();
+}
+
+/* --- Sections du corps habillé ------------------------------------------
+   Les vêtements sont bâtis sur le profil du corps déformé, tranche par
+   tranche. Le vêtement épouse donc l'anatomie réelle, pas une approximation.
+   ------------------------------------------------------------------------ */
+function squelette(m, H){
+  var H0 = PROFIL.hauteurBase, R = PROFIL.reperes, fH = H/H0, F = facteursDe(m);
+  var y = {
+    sol:0, cheville:0.039*H, genou:A_(("l-knee"))*fH, fourche:PROFIL.yEntrejambe*fH,
+    bassin:R.bassin*fH, ceinture:R.ceinture*fH, poitrine:R.poitrine*fH,
+    aisselle:R.aisselle*fH, epaule:R.epaule*fH, cou:R.cou*fH,
+    menton:(R.cou+3.5)*fH, tete:H
+  };
+  var keys = [];
+  for(var yb = PROFIL.yEntrejambe + 2; yb <= R.epaule + 3.2; yb += 2.0){
+    var p = proAt(yb/H0); if(!p.rx) continue;
+    var f = facteurRadial(yb, F), rho = 1;
+    if(f > 1){
+      var wv = lisse(1 - Math.abs(yb - R.ceinture)/17);
+      rho = 1 + wv*0.42*Math.min(1, (f-1)*3.2);
+    }
+    var fx = f * peri(p.rx, p.rz) / peri(p.rx, p.rz*rho), fz = fx*rho;
+    keys.push({y:yb*fH, rx:p.rx*fx, rz:p.rz*fz, n:2.25, cz:p.zc, c:p.c*f, k:p.rz/p.rx});
+  }
+  return {y:y, keys:keys, prof:proAt(R.poitrine/H0).rz*2, F:F, fH:fH};
+}
+function A_(n){ return PROFIL.articulations[n][1]; }
+
+function zoneDuY(sk, H){
+  var y = sk.y;
+  return function(v){
+    if(v >= y.aisselle) return 1;
+    if(v >= y.poitrine - 0.030*H) return 2;
+    if(v >= y.ceinture - 0.030*H) return 3;
+    if(v >= y.fourche) return 4;
+    return 5;
+  };
+}
+// Oriente un membre (bâti selon -Y local) sur son axe anatomique réel.
+function orienterMembre(grp, Ja, Jb, s, fEp, fH){
+  var ax=Ja[0]*s*fEp, ay=Ja[1]*fH, az=Ja[2];
+  grp.position.set(ax, ay, az);
+  var d = new T.Vector3((Jb[0]*s-Ja[0]*s)*fH, (Jb[1]-Ja[1])*fH, (Jb[2]-Ja[2])*fH).normalize();
+  grp.quaternion.setFromUnitVectors(new T.Vector3(0,-1,0), d);
+}
+function P_(m,f){ return m.poitrine*f; }
+function B_(m,f){ return m.bassin*f; }
+
+/* ==========================================================================
+   3. TISSUS — générés à l'exécution (aucune image téléchargée).
+   En production ce canvas reçoit la photo à plat du vêtement, détourée et
+   déformée vers l'atlas UV de l'archétype (cf. docs/03-pipeline-vetements-3d.md).
+   Le bouton « Photo du stock » ci-dessous fait exactement ça, en simplifié.
+   ========================================================================== */
+var CACHE_TEX = {};
+function toile(f){
+  var cv = document.createElement("canvas"); cv.width = cv.height = 512;
+  var x = cv.getContext("2d"); f(x, 512);
+  var t = new T.CanvasTexture(cv);
+  t.wrapS = t.wrapT = T.RepeatWrapping;
+  t.anisotropy = 4;
+  return t;
+}
+function grain(x, N, a){
+  var d = x.getImageData(0,0,N,N), p = d.data;
+  for(var i=0;i<p.length;i+=4){
+    var v = (Math.random()-0.5)*a;
+    p[i]+=v; p[i+1]+=v; p[i+2]+=v;
+  }
+  x.putImageData(d,0,0);
+}
+function trame(x, N, alpha){
+  x.globalAlpha = alpha;
+  for(var i=0;i<N;i+=3){ x.fillStyle="#000"; x.fillRect(0,i,N,1); x.fillStyle="#fff"; x.fillRect(i,0,1,N); }
+  x.globalAlpha = 1;
+}
+var TISSUS = {
+  uni: function(c){ return function(x,N){ x.fillStyle=c; x.fillRect(0,0,N,N); trame(x,N,.05); grain(x,N,9); }; },
+  // Faso Dan Fani : bandes tissées de largeurs inégales, la signature textile burkinabè
+  danfani: function(a,b,c){ return function(x,N){
+    x.fillStyle=a; x.fillRect(0,0,N,N);
+    var pos=0, i=0, L=[38,7,4,7,52,11,4,11,26,5];
+    while(pos<N){ var w=L[i%L.length]; x.fillStyle=(i%3===0)?b:(i%3===1?c:a); x.fillRect(pos,0,w,N); pos+=w; i++; }
+    x.globalAlpha=.16; for(var y=0;y<N;y+=4){ x.fillStyle="#000"; x.fillRect(0,y,N,2); } x.globalAlpha=1;
+    grain(x,N,12);
+  }; },
+  rayures: function(a,b){ return function(x,N){
+    x.fillStyle=a; x.fillRect(0,0,N,N); x.fillStyle=b;
+    for(var i=0;i<N;i+=22){ x.fillRect(i,0,3,N); x.fillRect(i+7,0,1,N); }
+    trame(x,N,.05); grain(x,N,7);
+  }; },
+  carreaux: function(a,b,c){ return function(x,N){
+    x.fillStyle=a; x.fillRect(0,0,N,N);
+    x.globalAlpha=.55; x.fillStyle=b;
+    for(var i=0;i<N;i+=64){ x.fillRect(i,0,26,N); x.fillRect(0,i,N,26); }
+    x.globalAlpha=.9; x.fillStyle=c;
+    for(var j=0;j<N;j+=64){ x.fillRect(j+38,0,4,N); x.fillRect(0,j+38,N,4); }
+    x.globalAlpha=1; grain(x,N,8);
+  }; },
+  bogolan: function(a,b){ return function(x,N){
+    x.fillStyle=a; x.fillRect(0,0,N,N); x.fillStyle=b;
+    for(var r=0;r<N;r+=64) for(var c2=0;c2<N;c2+=64){
+      var o=(r/64)%2?32:0;
+      x.fillRect(c2+o+8,r+8,16,4); x.fillRect(c2+o+8,r+28,16,4);
+      x.beginPath(); x.arc(c2+o+16,r+18,5,0,6.3); x.fill();
+    }
+    x.globalAlpha=.2; for(var y2=0;y2<N;y2+=6){ x.fillStyle="#000"; x.fillRect(0,y2,N,1); } x.globalAlpha=1;
+    grain(x,N,14);
+  }; },
+  jean: function(a,b){ return function(x,N){
+    x.fillStyle=a; x.fillRect(0,0,N,N);
+    x.strokeStyle=b; x.lineWidth=1.4; x.globalAlpha=.5;
+    for(var i=-N;i<N*2;i+=5){ x.beginPath(); x.moveTo(i,0); x.lineTo(i+N,N); x.stroke(); }
+    x.globalAlpha=1; grain(x,N,16);
+  }; }
+};
+function tex(id, gen, rep){
+  if(!CACHE_TEX[id]){ CACHE_TEX[id] = toile(gen); }
+  var t = CACHE_TEX[id].clone(); t.needsUpdate = true;
+  t.wrapS = t.wrapT = T.RepeatWrapping;
+  t.repeat.set(rep[0], rep[1]);
+  return t;
+}
+
+/* ==========================================================================
+   4. LE STOCK
+   Chaque référence porte ce que le commerçant mesure réellement : le vêtement
+   posé à plat, largeur × 2 = périmètre. C'est tout le secret du moteur.
+   ========================================================================== */
+var CAT = {
+  haut: [
+    { id:"chem-dan", nom:"Chemise Faso Dan Fani", coupe:"chemise", prix:18000, plancher:14000,
+      tissu:["danfani","#20344F","#C89A3C","#E8E2D4"], rep:[2.2,2.2], manche:"longue",
+      tailles:{ S:{poitrine:102,epaules:44,longueur:67,manche:60,bras:39},
+                M:{poitrine:108,epaules:46,longueur:69,manche:61.5,bras:41},
+                L:{poitrine:114,epaules:48,longueur:71,manche:63,bras:43},
+                XL:{poitrine:120,epaules:50,longueur:73,manche:64.5,bras:45},
+                XXL:{poitrine:126,epaules:52,longueur:75,manche:66,bras:47} } },
+    { id:"chem-ox", nom:"Chemise oxford blanche", coupe:"chemise", prix:15000, plancher:11500,
+      tissu:["uni","#EFEFE9"], rep:[3,3], manche:"longue",
+      tailles:{ S:{poitrine:100,epaules:43.5,longueur:66,manche:59.5,bras:38},
+                M:{poitrine:106,epaules:45.5,longueur:68,manche:61,bras:40},
+                L:{poitrine:112,epaules:47.5,longueur:70,manche:62.5,bras:42},
+                XL:{poitrine:118,epaules:49.5,longueur:72,manche:64,bras:44},
+                XXL:{poitrine:124,epaules:51.5,longueur:74,manche:65.5,bras:46} } },
+    { id:"chem-car", nom:"Chemise carreaux MC", coupe:"chemise", prix:13500, plancher:10000,
+      tissu:["carreaux","#7C2F2A","#20242C","#D9CDBA"], rep:[2.4,2.4], manche:"courte",
+      tailles:{ S:{poitrine:104,epaules:44,longueur:66,manche:22,bras:40},
+                M:{poitrine:110,epaules:46,longueur:68,manche:23,bras:42},
+                L:{poitrine:116,epaules:48,longueur:70,manche:24,bras:44},
+                XL:{poitrine:122,epaules:50,longueur:72,manche:25,bras:46},
+                XXL:{poitrine:128,epaules:52,longueur:74,manche:26,bras:48} } },
+    { id:"tsh-ouaga", nom:"T-shirt oversize Ouaga City", coupe:"tshirt", prix:8500, plancher:6000,
+      tissu:["bogolan","#23262B","#D8CFBC"], rep:[2,2], manche:"courte",
+      tailles:{ S:{poitrine:106,epaules:47,longueur:65,manche:21,bras:42},
+                M:{poitrine:112,epaules:49,longueur:67,manche:22,bras:44},
+                L:{poitrine:118,epaules:51,longueur:69,manche:23,bras:46},
+                XL:{poitrine:124,epaules:53,longueur:71,manche:24,bras:48},
+                XXL:{poitrine:130,epaules:55,longueur:73,manche:25,bras:50} } },
+    { id:"tun-sahel", nom:"Tunique Sahel brodée", coupe:"tunique", prix:27000, plancher:21000,
+      tissu:["uni","#D9D2C2"], rep:[2.6,2.6], manche:"longue",
+      tailles:{ S:{poitrine:112,epaules:46,longueur:80,manche:60,bras:44},
+                M:{poitrine:118,epaules:48,longueur:83,manche:61.5,bras:46},
+                L:{poitrine:124,epaules:50,longueur:86,manche:63,bras:48},
+                XL:{poitrine:130,epaules:52,longueur:89,manche:64.5,bras:50},
+                XXL:{poitrine:136,epaules:54,longueur:92,manche:66,bras:52} } }
+  ],
+  bas: [
+    { id:"pan-chino", nom:"Pantalon chino", coupe:"pantalon", prix:16000, plancher:12500,
+      tissu:["uni","#7C6844"], rep:[2.4,3], longueurJambe:"longue",
+      tailles:{ "28":{ceinture:74,bassin:92,cuisse:56,entrejambe:78},
+                "30":{ceinture:79,bassin:97,cuisse:58,entrejambe:79},
+                "32":{ceinture:84,bassin:102,cuisse:60,entrejambe:80},
+                "34":{ceinture:89,bassin:107,cuisse:63,entrejambe:81},
+                "36":{ceinture:94,bassin:112,cuisse:66,entrejambe:82},
+                "38":{ceinture:99,bassin:117,cuisse:69,entrejambe:82} } },
+    { id:"pan-jean", nom:"Jean slim brut", coupe:"jean", prix:20000, plancher:15500,
+      tissu:["jean","#2B3A52","#7E8CA3"], rep:[2.2,3], longueurJambe:"longue",
+      tailles:{ "28":{ceinture:73,bassin:90,cuisse:53,entrejambe:79},
+                "30":{ceinture:78,bassin:95,cuisse:55,entrejambe:80},
+                "32":{ceinture:83,bassin:100,cuisse:57,entrejambe:81},
+                "34":{ceinture:88,bassin:105,cuisse:59,entrejambe:82},
+                "36":{ceinture:93,bassin:110,cuisse:62,entrejambe:82},
+                "38":{ceinture:98,bassin:115,cuisse:65,entrejambe:83} } },
+    { id:"pan-dan", nom:"Pantalon Dan Fani assorti", coupe:"pantalon", prix:22000, plancher:17000,
+      tissu:["danfani","#20344F","#C89A3C","#E8E2D4"], rep:[2,3], longueurJambe:"longue",
+      tailles:{ "28":{ceinture:75,bassin:94,cuisse:58,entrejambe:77},
+                "30":{ceinture:80,bassin:99,cuisse:60,entrejambe:78},
+                "32":{ceinture:85,bassin:104,cuisse:62,entrejambe:79},
+                "34":{ceinture:90,bassin:109,cuisse:65,entrejambe:80},
+                "36":{ceinture:95,bassin:114,cuisse:68,entrejambe:81},
+                "38":{ceinture:100,bassin:119,cuisse:71,entrejambe:81} } }
+  ],
+  casquette: [
+    { id:"cap-faso", nom:"Casquette brodée FASO", coupe:"casquette", prix:5000, plancher:3500,
+      tissu:["uni","#1E2A3D"], rep:[1,1], tailles:{ Unique:{} } },
+    { id:"cap-dan", nom:"Casquette Dan Fani", coupe:"casquette", prix:6500, plancher:4500,
+      tissu:["danfani","#20344F","#C89A3C","#E8E2D4"], rep:[1.4,1.4], tailles:{ Unique:{} } }
+  ],
+  parfum: [
+    { id:"par-kos", nom:"Parfum Kosseyo 50 ml", coupe:"parfum", prix:12000, plancher:9000,
+      tissu:["uni","#6B2F4A"], rep:[1,1], tailles:{ "50ml":{} } }
+  ]
+};
+
+/* ==========================================================================
+   5. LES VÊTEMENTS EN 3D
+   Un vêtement reprend les sections du corps, dilatées par l'aisance réelle de
+   la taille choisie, avec un plancher de tombé : le tissu ne rentre pas dans
+   le creux de la taille, il pend depuis la poitrine. C'est ce détail qui fait
+   la différence entre « peinture sur le corps » et « vêtement porté ».
+   ========================================================================== */
+var EP = 0.55; // épaisseur de tissu, cm
+
+function dilate(key, circGarment, circBody){
+  var f = circGarment / circBody;
+  return {y:key.y, rx:key.rx*f + EP, rz:key.rz*f + EP, n:key.n};
+}
+
+function construireHaut(m, H, art, taille, mat){
+  var sk = squelette(m, H), y = sk.y, g = new T.Group();
+  var G = art.tailles[taille];
+  // La longueur d'un vêtement se mesure depuis la carrure haute (base du cou),
+  // pas depuis l'acromion : 9 cm d'écart, soit une chemise qui tombe à
+  // mi-cuisse au lieu de juste sous la ceinture.
+  var yHem = y.cou - G.longueur;
+  var yTop = y.epaule;
+  var fPoitrine = G.poitrine / m.poitrine;
+  var taper = art.coupe === "tshirt" ? 0 : (art.coupe === "tunique" ? -3 : 4);
+  var circTaille = G.poitrine - taper;
+  var fEpaules = G.epaules / m.epaules;
+
+  var keys = [];
+  sk.keys.forEach(function(k){
+    if(k.y < yHem - 0.5 || k.y > yTop) return;
+    var f;
+    if(k.y >= y.aisselle) f = fEpaules;                         // au-dessus de l'aisselle : largeur d'épaule
+    else if(k.y >= y.poitrine) f = fPoitrine;
+    else if(k.y >= y.ceinture) f = (circTaille) / k.c;
+    else f = (circTaille + 2) / k.c;
+    keys.push({y:k.y, rx:k.rx*f + EP, rz:k.rz*f + EP, n:k.n, c:k.c});
+  });
+  // Ourlet : on prolonge la dernière section jusqu'au bas réel du vêtement
+  var bas = keys[0];
+  keys.unshift({y:yHem, rx:bas.rx*1.008, rz:bas.rz*1.008, n:bas.n});
+  keys.unshift({y:yHem-0.4, rx:bas.rx*1.0, rz:bas.rz*1.0, n:bas.n});
+  keys.sort(function(a,b){return a.y-b.y});
+
+  // Empiècement d'épaule : de la couture d'épaule jusqu'au col, en pente.
+  // Sans lui, le vêtement passe de la largeur d'épaule à celle du cou en 3 cm
+  // et le maillage rend une étagère plate qui sort du corps.
+  var pcou = proAt(PROFIL.reperes.cou/PROFIL.hauteurBase);
+  var rcx = pcou.rx*sk.F.cou*1.16, rcz = pcou.rz*sk.F.cou*1.24;
+  var yc0 = PROFIL.reperes.epaule, yc1 = PROFIL.reperes.cou, H0e = PROFIL.hauteurBase;
+  for(var yy = yc0 + 1.2; yy <= yc1 + 1.2; yy += 1.3){
+    var pp = proAt(yy/H0e), ff = facteurRadial(yy, sk.F);
+    var t2 = Math.min(1, (yy - yc0)/(yc1 - yc0));
+    var ez = fEpaules*(1-t2) + 1.14*t2;          // l'aisance se resserre vers le col
+    keys.push({y:yy*sk.fH, rx:Math.max(pp.rx*ff*ez, rcx)+EP,
+               rz:Math.max(pp.rz*ff*ez, rcz)+EP, n:2.3, cz:pp.zc});
+  }
+
+  // Plancher de tombé : sous la poitrine, jamais plus étroit que 93 % du tour
+  // de poitrine du vêtement. Le tissu pend, il ne se colle pas au creux du dos.
+  var iP = 0; for(var i=0;i<keys.length;i++) if(keys[i].y <= y.poitrine) iP = i;
+  var rxP = keys[iP].rx, rzP = keys[iP].rz;
+  for(var j=0;j<iP;j++){
+    keys[j].rx = Math.max(keys[j].rx, rxP*0.93);
+    keys[j].rz = Math.max(keys[j].rz, rzP*0.93);
+  }
+
+  var zf = zoneDuY(sk, H);
+  var corps = new T.Mesh(tisser(keys, {rings:50, seg:48, uRepeat:1, vRepeat:1, zoneAt:zf}), mat);
+  corps.castShadow = true; corps.receiveShadow = true; g.add(corps);
+
+  // Manches — posées sur l'axe anatomique épaule → poignet du maillage,
+  // pas sur une rotation devinée. Elles suivent donc le bras quoi qu'il arrive.
+  var bic = m.poitrine*0.335;
+  var fBras = G.bras / bic;
+  var A = PROFIL.articulations, Sh = A["l-shoulder"], Mn = A["l-hand"];
+  var Lbras = Math.sqrt(Math.pow(Mn[0]-Sh[0],2)+Math.pow(Mn[1]-Sh[1],2)+Math.pow(Mn[2]-Sh[2],2))*sk.fH;
+  var longue = art.manche === "longue";
+  var finManche = longue ? -(Lbras - 1.0) : -Lbras*Math.min(0.92, G.manche/m.manche);
+  var Lh = Lbras*0.52, Lf = Lbras*0.48;
+  [-1,1].forEach(function(s){
+    var br = new T.Group();
+    orienterMembre(br, Sh, Mn, s, sk.F.epaules, sk.fH);
+    var rb = rayons(bic*fBras, 0.92, 2.1);
+    var rFin = rayons((longue ? bic*fBras*0.60 : bic*fBras*0.94), 0.90, 2.1);
+    var mk = [
+      {y:finManche-0.8, rx:rFin.rx+EP, rz:rFin.rz+EP, n:2.1},
+      {y:finManche,     rx:rFin.rx*1.05+EP, rz:rFin.rz*1.05+EP, n:2.1},
+      {y:finManche*0.55,rx:(rb.rx+rFin.rx)/2*1.04+EP, rz:(rb.rz+rFin.rz)/2*1.04+EP, n:2.1},
+      {y:-Lh*0.45,      rx:rb.rx+EP, rz:rb.rz+EP, n:2.1},
+      {y:-0.004*H,      rx:rb.rx*1.10+EP, rz:rb.rz*1.08+EP, n:2.2},
+      {y: 0.020*H,      rx:rb.rx*1.16+EP, rz:rb.rz*1.12+EP, n:2.4}
+    ];
+    var mm = new T.Mesh(tisser(mk, {rings:30, seg:28, capHaut:true, zoneAt:function(){return 6}}), mat);
+    mm.castShadow = true; br.add(mm); g.add(br);
+  });
+
+  // Col + boutonnage : deux détails minuscules qui font lire « chemise »
+  if(art.coupe !== "tshirt"){
+    var pc = proAt(PROFIL.reperes.cou/PROFIL.hauteurBase);
+    var fc = sk.F.cou, cx = pc.rx*fc, cz2 = pc.rz*fc, zc = pc.zc;
+    var col = new T.Mesh(tisser([
+      {y:y.cou-0.006*H, rx:cx*1.10+EP, rz:cz2*1.10+EP, n:2.2, cz:zc},
+      {y:y.cou+0.014*H, rx:cx*1.22+EP, rz:cz2*1.26+EP, n:2.2, cz:zc},
+      {y:y.cou+0.024*H, rx:cx*1.28+EP, rz:cz2*1.34+EP, n:2.2, cz:zc}
+    ], {rings:10, seg:32, zoneAt:function(){return 1}}), mat);
+    col.material = mat; col.castShadow = true; g.add(col);
+
+    var bMat = new T.MeshStandardMaterial({color:0xE8E4DA, roughness:.42, metalness:.05});
+    var nB = art.coupe === "tunique" ? 4 : 7;
+    for(var b=0;b<nB;b++){
+      var yb = y.cou - 0.03*H - b*(G.longueur*0.10);
+      if(yb < yHem + 4) break;
+      var s2 = echantillon(keys, Math.min(Math.max(yb, keys[0].y), keys[keys.length-1].y));
+      var bt = new T.Mesh(new T.SphereGeometry(0.62, 10, 8), bMat);
+      bt.position.set(0, yb, s2.cz + s2.rz + 0.2);
+      g.add(bt);
+    }
+  }
+  g.userData.G = G;
+  return g;
+}
+
+function construireBas(m, H, art, taille, mat){
+  var sk = squelette(m, H), y = sk.y, g = new T.Group();
+  var G = art.tailles[taille];
+  var fC = G.ceinture / m.ceinture, fB = G.bassin / m.bassin;
+  var yTop = y.ceinture + 0.012*H;
+
+  var keys = [];
+  sk.keys.forEach(function(k){
+    if(k.y < y.fourche + 1 || k.y > yTop) return;
+    var f = k.y >= y.ceinture ? fC : (k.y >= y.bassin ? (fC+fB)/2 : fB);
+    keys.push({y:k.y, rx:k.rx*f + EP, rz:k.rz*f + EP, n:k.n});
+  });
+  keys.sort(function(a,b){return a.y-b.y});
+  var zf = zoneDuY(sk, H);
+  var bassin = new T.Mesh(tisser(keys, {rings:26, seg:44, zoneAt:zf}), mat);
+  bassin.castShadow = true; g.add(bassin);
+
+  // Sous l'entrejambe, une coupe horizontale ne contient plus l'axe du corps :
+  // proAt renvoie donc la section d'UNE jambe. On mesure la cuisse réelle du
+  // mannequin au lieu de la déduire du bassin — sinon le pantalon est trop
+  // étroit et la cuisse traverse le tissu.
+  var H0b = PROFIL.hauteurBase, fJ = 1 + (sk.F.bassin-1)*0.88;
+  var yCuisse = PROFIL.yEntrejambe - 5;
+  var cuisseReelle = proAt(yCuisse/H0b).c * fJ;
+  var fCu = G.cuisse / cuisseReelle;
+  var courte = art.longueurJambe === "courte";
+  var A2 = PROFIL.articulations, Hn = A2["l-upper-leg"], Ck = A2["l-ankle"];
+  var Lj = Math.sqrt(Math.pow(Ck[0]-Hn[0],2)+Math.pow(Ck[1]-Hn[1],2)+Math.pow(Ck[2]-Hn[2],2))*sk.fH;
+  var yHanche = Hn[1]*sk.fH;
+  [-1,1].forEach(function(s){
+    var jb = new T.Group();
+    orienterMembre(jb, Hn, Ck, s, sk.F.bassin, sk.fH);
+    var bas2 = courte ? -Lj*0.44 : -Lj + 2.0;
+    // Le pantalon reprend le profil de la jambe, tranche par tranche, dilaté
+    // par l'aisance mesurée de la taille choisie. Le bas reste toujours au
+    // moins aussi large que la cheville, sinon le tissu l'étrangle.
+    var niv = courte ? [0.030, 0, -0.20, -0.40, -0.44]
+                     : [0.030, 0, -0.20, -0.42, -0.60, -0.80, -0.97, -1.0];
+    var jk = niv.map(function(t){
+      var ly = t*Lj, wy = yHanche + ly;
+      var pj = proAt((wy/sk.fH)/H0b);
+      var ev = 1 + Math.max(0, -t-0.55)*0.30;     // léger évasement vers le bas
+      var g2 = Math.max(fCu, 1.07) * ev;
+      // La jambe n'est pas centrée sur l'axe hanche→cheville : on décale la
+      // section, sinon la cuisse traverse le tissu d'un côté.
+      return {y:ly, rx:pj.rx*fJ*g2 + EP, rz:pj.rz*fJ*g2 + EP, n:2.25,
+              cz:(pj.zc - Hn[2])*0.8};
+    }).reverse();
+    var jm = new T.Mesh(tisser(jk, {rings:34, seg:30, zoneAt:function(v){return v > -Lj*0.30 ? 4 : 5}}), mat);
+    jm.castShadow = true; jb.add(jm); g.add(jb);
+  });
+  g.userData.G = G;
+  return g;
+}
+
+function construireCasquette(m, H, art, mat){
+  var g = new T.Group(), sk = squelette(m, H), H0 = PROFIL.hauteurBase;
+  // Une casquette se pose sur la ligne de bandeau — environ 8 % de la stature
+  // sous le sommet du crâne. Plus bas, elle couvre les yeux.
+  var yD = H*0.947, hh = H - yD;
+  var pt = proAt((yD/sk.fH)/H0), fT = facteurRadial(yD/sk.fH, sk.F);
+  var rT = pt.rx*fT*1.08, rTz = pt.rz*fT*1.08, zc = pt.zc;
+  // Hémisphère franc : au-delà de 90°, la calotte descend sous son centre et
+  // finit par couvrir les yeux.
+  var dome = new T.Mesh(new T.SphereGeometry(1, 32, 20, 0, Math.PI*2, 0, Math.PI*0.5), mat);
+  dome.scale.set(rT, hh*1.14, rTz);
+  dome.position.set(0, yD, zc);
+  dome.castShadow = true; g.add(dome);
+
+  // Visière : nappe paramétrique, arc frontal projeté vers l'avant et courbé
+  var seg = 26, rad = 10, pos = [], idx = [], uv = [];
+  for(var i=0;i<=rad;i++){
+    var v = i/rad, ext = 1 + v*0.62;
+    for(var j=0;j<=seg;j++){
+      var u = j/seg, th = (-0.60 + u*1.20)*Math.PI;
+      pos.push(Math.sin(th)*rT*0.82*(1-v*0.12), -v*v*2.2, Math.cos(th)*rTz*0.92*ext);
+      uv.push(u, v);
+    }
+  }
+  for(var i2=0;i2<rad;i2++) for(var j2=0;j2<seg;j2++){
+    var A=i2*(seg+1)+j2, B=A+1, C=A+seg+1, D=C+1;
+    idx.push(A,C,B, B,C,D);
+  }
+  var vg = new T.BufferGeometry();
+  vg.setAttribute("position", new T.Float32BufferAttribute(pos,3));
+  vg.setAttribute("uv", new T.Float32BufferAttribute(uv,2));
+  vg.setAttribute("color", new T.Float32BufferAttribute(new Float32Array(pos.length),3));
+  vg.userData.zid = new Array(pos.length/3).fill(1);
+  vg.setIndex(idx); vg.computeVertexNormals();
+  var vis = new T.Mesh(vg, mat);
+  vis.position.set(0, yD + hh*0.06, zc + rTz*0.14);
+  vis.castShadow = true; g.add(vis);
+  return g;
+}
+
+/* ==========================================================================
+   6. MOTEUR D'AJUSTEMENT
+   aisance = mesure du vêtement − mesure du corps. On la compare à la plage
+   attendue pour la coupe. C'est tout. Pas d'IA, pas de magie : de la mesure.
+   ========================================================================== */
+var ZONES = {1:"Épaules", 2:"Poitrine", 3:"Ceinture", 4:"Bassin", 5:"Cuisse", 6:"Bras"};
+var CIBLES = {
+  chemise:  {1:[1,4.5], 2:[14,22], 3:[10,26], 6:[6,13]},
+  tshirt:   {1:[2,8],   2:[10,20], 3:[8,24],  6:[7,15]},
+  tunique:  {1:[2,6],   2:[18,28], 3:[16,34], 6:[8,16]},
+  pantalon: {3:[1,4],   4:[4,10],  5:[4,9]},
+  jean:     {3:[0,3],   4:[2,8],   5:[2,7]}
+};
+function aisances(m, art, taille){
+  var G = art.tailles[taille], a = {};
+  if(art.coupe === "pantalon" || art.coupe === "jean"){
+    a[3] = G.ceinture - m.ceinture;
+    a[4] = G.bassin - m.bassin;
+    a[5] = G.cuisse - m.bassin*0.585;
+  } else {
+    var taper = art.coupe === "tshirt" ? 0 : (art.coupe === "tunique" ? -3 : 4);
+    a[1] = G.epaules - m.epaules;
+    a[2] = G.poitrine - m.poitrine;
+    a[3] = (G.poitrine - taper) - m.ceinture;
+    a[6] = G.bras - m.poitrine*0.335;
+  }
+  return a;
+}
+function noter(e, lo, hi){
+  if(e >= lo && e <= hi) return {s:1, e:"g"};
+  var span = Math.max(6, hi-lo);
+  if(e < lo) return {s:Math.max(0, 1-(lo-e)/span), e:"t"};
+  return {s:Math.max(0, 1-(e-hi)/(span*1.6)), e:"l"};
+}
+function evaluer(m, art, taille){
+  var cib = CIBLES[art.coupe]; if(!cib) return null;
+  var a = aisances(m, art, taille), det = {}, min = 1, som = 0, n = 0;
+  for(var z in cib){
+    var r = noter(a[z], cib[z][0], cib[z][1]);
+    det[z] = {aisance:a[z], score:r.s, etat:r.e, lo:cib[z][0], hi:cib[z][1]};
+    min = Math.min(min, r.s); som += r.s; n++;
+  }
+  return {det:det, min:min, moy:som/n, taille:taille};
+}
+function meilleureTaille(m, art){
+  var best = null;
+  Object.keys(art.tailles).forEach(function(t){
+    var r = evaluer(m, art, t); if(!r) return;
+    r.rang = r.min*2 + r.moy;
+    if(!best || r.rang > best.rang) best = r;
+  });
+  return best;
+}
+
+/* ==========================================================================
+   7. SCÈNE
+   ========================================================================== */
+var cv = document.getElementById("cv"), stage = document.getElementById("stage");
+var ren = new T.WebGLRenderer({canvas:cv, antialias:true, alpha:true, preserveDrawingBuffer:true});
+ren.setPixelRatio(Math.min(window.devicePixelRatio||1, 1.9));
+ren.outputEncoding = T.sRGBEncoding;
+ren.toneMapping = T.ACESFilmicToneMapping;
+ren.toneMappingExposure = 0.92;
+ren.shadowMap.enabled = true;
+ren.shadowMap.type = T.PCFSoftShadowMap;
+
+var scene = new T.Scene();
+var camera = new T.PerspectiveCamera(32, 1, 1, 3000);
+
+// Environnement : deux boîtes à lumière peintes dans un canvas, converties en
+// carte d'environnement. Donne au tissu un reflet doux sans aucun asset.
+(function(){
+  var c = document.createElement("canvas"); c.width = 512; c.height = 256;
+  var x = c.getContext("2d");
+  var gr = x.createLinearGradient(0,0,0,256);
+  gr.addColorStop(0,"#9FB0C4"); gr.addColorStop(.48,"#5C6774"); gr.addColorStop(.52,"#2A3038"); gr.addColorStop(1,"#12161C");
+  x.fillStyle = gr; x.fillRect(0,0,512,256);
+  [[120,70,90,44],[380,84,70,36]].forEach(function(b){
+    var g2 = x.createRadialGradient(b[0],b[1],0,b[0],b[1],b[2]);
+    g2.addColorStop(0,"rgba(255,252,244,1)"); g2.addColorStop(1,"rgba(255,252,244,0)");
+    x.fillStyle = g2; x.beginPath(); x.ellipse(b[0],b[1],b[2],b[3],0,0,6.3); x.fill();
+  });
+  var t2 = new T.CanvasTexture(c); t2.mapping = T.EquirectangularReflectionMapping;
+  var pm = new T.PMREMGenerator(ren); pm.compileEquirectangularShader();
+  scene.environment = pm.fromEquirectangular(t2).texture;
+  t2.dispose(); pm.dispose();
+})();
+
+var key = new T.DirectionalLight(0xfff4e2, 2.0); key.position.set(90, 190, 130);
+key.castShadow = true; key.shadow.mapSize.set(1024,1024);
+key.shadow.camera.near = 40; key.shadow.camera.far = 520;
+key.shadow.camera.left = -110; key.shadow.camera.right = 110;
+key.shadow.camera.top = 230; key.shadow.camera.bottom = -20;
+key.shadow.bias = -0.0018; key.shadow.radius = 3;
+scene.add(key);
+var fill = new T.DirectionalLight(0x9FC0E8, 0.85); fill.position.set(-140, 90, -60); scene.add(fill);
+var rim  = new T.DirectionalLight(0xFFE3B8, 0.70); rim.position.set(0, 60, -190);   scene.add(rim);
+scene.add(new T.HemisphereLight(0xC9D6E6, 0x1A1D22, 0.34));
+
+var sol = new T.Mesh(new T.CircleGeometry(150, 56), new T.ShadowMaterial({opacity:.45}));
+sol.rotation.x = -Math.PI/2; sol.receiveShadow = true; scene.add(sol);
+var disque = new T.Mesh(new T.RingGeometry(52, 56, 64),
+  new T.MeshBasicMaterial({color:0x3C4757, transparent:true, opacity:.5, side:T.DoubleSide}));
+disque.rotation.x = -Math.PI/2; disque.position.y = .2; scene.add(disque);
+
+var monde = new T.Group(); scene.add(monde);
+
+/* ---- caméra orbitale (écrite à la main : évite une dépendance de plus) ---- */
+var orb = {th:0.42, ph:1.44, d:330, cy:95, drag:false, px:0, py:0, pd:0, auto:true, pause:0};
+var reduit = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+function placerCam(){
+  var st = Math.sin(orb.ph), x = orb.d*st*Math.sin(orb.th), z = orb.d*st*Math.cos(orb.th), y = orb.d*Math.cos(orb.ph);
+  camera.position.set(x, y + orb.cy, z);
+  camera.lookAt(0, orb.cy, 0);
+}
+cv.addEventListener("pointerdown", function(e){ orb.drag=true; orb.px=e.clientX; orb.py=e.clientY; orb.pause=performance.now()+2600; cv.setPointerCapture(e.pointerId); });
+cv.addEventListener("pointermove", function(e){
+  if(!orb.drag) return;
+  orb.th -= (e.clientX-orb.px)*0.0082;
+  orb.ph = Math.min(2.42, Math.max(0.42, orb.ph - (e.clientY-orb.py)*0.0060));
+  orb.px = e.clientX; orb.py = e.clientY; orb.pause = performance.now()+2600; besoin = true;
+});
+["pointerup","pointercancel","pointerleave"].forEach(function(ev){ cv.addEventListener(ev, function(){ orb.drag=false; }); });
+cv.addEventListener("wheel", function(e){
+  e.preventDefault();
+  orb.d = Math.min(620, Math.max(130, orb.d + e.deltaY*0.42)); besoin = true;
+}, {passive:false});
+cv.addEventListener("touchmove", function(e){
+  if(e.touches.length !== 2) return;
+  e.preventDefault();
+  var dx = e.touches[0].clientX-e.touches[1].clientX, dy = e.touches[0].clientY-e.touches[1].clientY;
+  var d = Math.sqrt(dx*dx+dy*dy);
+  if(orb.pd) { orb.d = Math.min(620, Math.max(130, orb.d - (d-orb.pd)*1.1)); besoin = true; }
+  orb.pd = d; orb.pause = performance.now()+2600;
+}, {passive:false});
+cv.addEventListener("touchend", function(){ orb.pd = 0; });
+
+function redim(){
+  var w = stage.clientWidth, h = stage.clientHeight;
+  ren.setSize(w, h, false);
+  camera.aspect = w/h; camera.updateProjectionMatrix(); besoin = true;
+}
+window.addEventListener("resize", redim);
+
+/* ==========================================================================
+   8. ÉTAT + CONSTRUCTION
+   ========================================================================== */
+var CARNATIONS = ["#7A4B2E","#5E3620","#3F2416","#8E5C3A","#A9784F","#2E1A10"];
+var S = {
+  h:178, w:74, manuel:{}, carnation:0, mode:"rendu",
+  choix:{ haut:"chem-dan", bas:"pan-chino", casquette:"cap-faso" },
+  taille:{ haut:null, bas:null, casquette:"Unique" },
+  photo:null, style:"normal", tour:0, prixNego:null, livraison:"ouaga-centre"
+};
+var m = null, hautG = null, basG = null, capG = null, besoin = true;
+
+var matPeau = new T.MeshStandardMaterial({color:CARNATIONS[0], roughness:.68, metalness:.02, envMapIntensity:.55});
+var matFit  = new T.MeshStandardMaterial({vertexColors:true, roughness:.72, metalness:0, side:T.DoubleSide, envMapIntensity:.35});
+var COUL_FIT = {t:[.80,.30,.18], g:[.30,.64,.39], l:[.28,.55,.74], x:[.40,.43,.48]};
+
+function art(slot){ return CAT[slot].filter(function(a){ return a.id === S.choix[slot]; })[0]; }
+function matTissu(a){
+  if(a.id === S.choix.haut && S.photo){
+    var t = new T.CanvasTexture(S.photo);
+    t.wrapS = t.wrapT = T.RepeatWrapping; t.repeat.set(1.6,1.6); t.encoding = T.sRGBEncoding;
+    return new T.MeshStandardMaterial({map:t, roughness:.84, metalness:.02, side:T.DoubleSide, envMapIntensity:.4});
+  }
+  var f = a.tissu, gen = TISSUS[f[0]].apply(null, f.slice(1));
+  var t2 = tex(a.id, gen, a.rep); t2.encoding = T.sRGBEncoding;
+  return new T.MeshStandardMaterial({map:t2, roughness:.85, metalness:.02, side:T.DoubleSide, envMapIntensity:.4});
+}
+function peindre(grp, det){
+  grp.traverse(function(o){
+    if(!o.isMesh || !o.geometry.userData.zid) return;
+    var zid = o.geometry.userData.zid, col = o.geometry.attributes.color;
+    if(!col) return;
+    for(var i=0;i<zid.length;i++){
+      var d = det[zid[i]], c = COUL_FIT[d ? d.etat : "x"];
+      col.setXYZ(i, c[0], c[1], c[2]);
+    }
+    col.needsUpdate = true;
+  });
+}
+function vider(g){
+  if(!g) return;
+  g.traverse(function(o){
+    if(!o.isMesh) return;
+    o.geometry.dispose();
+    if(o.material !== matFit && o.material !== matPeau){   // matériaux partagés : on ne libère pas
+      if(o.material.map) o.material.map.dispose();
+      o.material.dispose();
+    }
+  });
+  monde.remove(g);
+}
+
+function reconstruire(){
+  if(!PROFIL) return;               // maillage pas encore arrivé
+  var est = estimer(S.h, S.w);
+  m = {}; MKEYS.forEach(function(k){ m[k.k] = (S.manuel[k.k] != null) ? S.manuel[k.k] : est[k.k]; });
+  m.imc = est.imc;
+
+  var H = S.h;
+  orb.cy = H*0.54;
+  matPeau.color.set(CARNATIONS[S.carnation]);
+
+  ["haut","bas","casquette"].forEach(function(s){
+    var a = art(s); if(!a) return;
+    if(a.coupe === "casquette"){ S.taille[s] = "Unique"; return; }
+    if(!S.taille[s] || !a.tailles[S.taille[s]]) S.taille[s] = meilleureTaille(m, a).taille;
+  });
+
+  deformerCorps(m, H);
+  if(!corpsMesh){
+    corpsMesh = new T.Mesh(geoCorps, matPeau);
+    corpsMesh.castShadow = true; corpsMesh.receiveShadow = true;
+    monde.add(corpsMesh);
+  }
+  vider(hautG); vider(basG); vider(capG);
+
+  var nu = S.mode === "nu", fit = S.mode === "fit";
+  if(!nu){
+    var aH = art("haut"), aB = art("bas"), aC = art("casquette");
+    if(aH){ hautG = construireHaut(m, H, aH, S.taille.haut, fit ? matFit : matTissu(aH)); monde.add(hautG); }
+    if(aB){ basG  = construireBas (m, H, aB, S.taille.bas,  fit ? matFit : matTissu(aB)); monde.add(basG); }
+    if(aC){ capG  = construireCasquette(m, H, aC, fit ? matFit : matTissu(aC)); monde.add(capG); }
+    if(fit){
+      if(aH && hautG) peindre(hautG, evaluer(m, aH, S.taille.haut).det);
+      if(aB && basG)  peindre(basG,  evaluer(m, aB, S.taille.bas).det);
+      if(aC && capG)  peindre(capG,  {1:{etat:"g"}});
+    }
+  }
+  besoin = true;
+  majHUD(); majFit(); majPrix(); rafraichirCatalogue();
+}
+
+/* ==========================================================================
+   9. INTERFACE
+   ========================================================================== */
+var $ = function(id){ return document.getElementById(id); };
+var fmt = function(n){ return Math.round(n).toLocaleString("fr-FR").replace(/ | /g," ") + " F"; };
+var sgn = function(n){ return (n>=0?"+":"") + n.toFixed(1); };
+
+/* ---- HUD ---- */
+function majHUD(){
+  var a = art("haut"), r = a ? evaluer(m, a, S.taille.haut) : null;
+  $("chip-body").textContent = S.h + " cm · " + S.w + " kg";
+  $("chip-chest").textContent = m.poitrine.toFixed(0) + " cm";
+  if(!r) return;
+  $("v-size").textContent = S.taille.haut;
+  $("v-sub").textContent = a.nom;
+  var c = confiance(r, a);
+  $("v-conf").style.width = Math.round(c*100) + "%";
+  var manque = manquantes(a);
+  $("v-conf-txt").textContent = manque.length
+    ? "Confiance " + Math.round(c*100) + " % — mesure " + manque[0].nom.toLowerCase() + " pour monter"
+    : "Confiance " + Math.round(c*100) + " % — sur mesures réelles";
+  $("legend").hidden = S.mode !== "fit";
+}
+function pertinentes(a){
+  return (a.coupe === "pantalon" || a.coupe === "jean")
+    ? [MKEYS[1], MKEYS[2]] : [MKEYS[0], MKEYS[3]];
+}
+function manquantes(a){ return pertinentes(a).filter(function(k){ return S.manuel[k.k] == null; }); }
+function confiance(best, a){
+  var P = pertinentes(a);
+  var mes = P.filter(function(k){ return S.manuel[k.k] != null; }).length / P.length;
+  return Math.max(.2, Math.min(.97, (0.52 + 0.48*mes) * (0.45 + 0.55*best.min)));
+}
+
+/* ---- Panneau morphologie ---- */
+function construireMesures(){
+  var w = $("mgrid"); w.innerHTML = "";
+  MKEYS.forEach(function(k){
+    var d = document.createElement("div"); d.className = "mfield";
+    d.innerHTML = '<label for="m-'+k.k+'">'+k.nom+' <span class="est" id="e-'+k.k+'">est.</span></label>'
+                + '<input type="number" id="m-'+k.k+'" min="'+k.min+'" max="'+k.max+'" step="0.5">';
+    w.appendChild(d);
+    d.querySelector("input").addEventListener("input", function(e){
+      var v = parseFloat(e.target.value);
+      if(isFinite(v) && v >= k.min && v <= k.max) S.manuel[k.k] = v; else delete S.manuel[k.k];
+      demander();
+    });
+  });
+}
+function majMesures(){
+  MKEYS.forEach(function(k){
+    var i = $("m-"+k.k), e = $("e-"+k.k);
+    if(document.activeElement !== i) i.value = m[k.k].toFixed(1);
+    var mes = S.manuel[k.k] != null;
+    e.textContent = mes ? "mesuré" : "est.";
+    e.dataset.state = mes ? "mesure" : "";
+  });
+}
+
+/* ---- Catalogue ---- */
+var SLOTS = [["haut","Hauts"],["bas","Bas"],["casquette","Casquettes"],["parfum","Parfums"]];
+function construireCatalogue(){
+  var w = $("catalogue"); w.innerHTML = "";
+  var n = 0; SLOTS.forEach(function(s){ n += CAT[s[0]].length; });
+  $("stock-count").textContent = n + " références";
+
+  SLOTS.forEach(function(sl){
+    var slot = sl[0];
+    var sec = document.createElement("div"); sec.className = "slot";
+    sec.innerHTML = '<div class="slot-h">'+sl[1]+'</div><div class="items" id="items-'+slot+'"></div>'
+                  + (slot!=="parfum" ? '<div class="sizes" id="sizes-'+slot+'"></div>' : '');
+    w.appendChild(sec);
+    var box = sec.querySelector(".items");
+    CAT[slot].forEach(function(a){
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "item"; b.dataset.slot = slot; b.dataset.id = a.id;
+      var f = a.tissu, c1 = f[1], c2 = f[2] || f[1];
+      b.innerHTML = '<span class="sw" style="background:linear-gradient(135deg,'+c1+' 0 50%,'+c2+' 50% 100%)"></span>'
+        + '<span><span class="nm">'+a.nom+'</span><span class="mt" id="mt-'+a.id+'"></span></span>'
+        + '<span class="pr">'+fmt(a.prix)+'<small>'+Object.keys(a.tailles).length+' taille'+(Object.keys(a.tailles).length>1?'s':'')+'</small></span>';
+      b.addEventListener("click", function(){
+        if(slot === "parfum"){ b.setAttribute("aria-pressed", b.getAttribute("aria-pressed")==="true" ? "false":"true"); majPrix(); return; }
+        S.choix[slot] = (S.choix[slot] === a.id) ? null : a.id;
+        S.taille[slot] = null; S.tour = 0; S.prixNego = null;
+        demander();
+      });
+      box.appendChild(b);
+    });
+  });
+
+  var extra = document.createElement("div"); extra.className = "slot";
+  extra.innerHTML = '<div class="slot-h">Carnation du mannequin</div><div class="fabrics" id="carn"></div>'
+    + '<div class="slot-h" style="margin-top:14px">Le vrai tissu du patron</div>'
+    + '<p class="note" style="margin:0 0 8px">Charge la photo d\'un vêtement posé à plat : elle est détourée et appliquée sur le haut. C\'est la chaîne de production en miniature.</p>'
+    + '<div class="btn-row"><button type="button" class="btn" id="btn-photo">Photo du stock</button>'
+    + '<button type="button" class="btn" id="btn-photo-off" hidden>Retirer la photo</button></div>'
+    + '<input type="file" id="file-photo" accept="image/*" hidden>';
+  $("catalogue").appendChild(extra);
+  CARNATIONS.forEach(function(c, i){
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "fab"; b.style.background = c;
+    b.setAttribute("aria-pressed", i === S.carnation ? "true":"false");
+    b.setAttribute("aria-label", "Carnation " + (i+1));
+    b.addEventListener("click", function(){
+      S.carnation = i;
+      [].forEach.call($("carn").children, function(x,j){ x.setAttribute("aria-pressed", j===i?"true":"false"); });
+      demander();
+    });
+    $("carn").appendChild(b);
+  });
+  $("btn-photo").addEventListener("click", function(){ $("file-photo").click(); });
+  $("file-photo").addEventListener("change", chargerPhoto);
+  $("btn-photo-off").addEventListener("click", function(){
+    S.photo = null; $("btn-photo-off").hidden = true; $("file-photo").value = ""; demander();
+  });
+}
+function rafraichirCatalogue(){
+  [].forEach.call(document.querySelectorAll(".item"), function(b){
+    if(b.dataset.slot === "parfum") return;
+    b.setAttribute("aria-pressed", S.choix[b.dataset.slot] === b.dataset.id ? "true":"false");
+  });
+  ["haut","bas","casquette"].forEach(function(slot){
+    var box = $("sizes-"+slot); if(!box) return;
+    var a = art(slot);
+    box.innerHTML = "";
+    if(!a){ return; }
+    var reco = a.coupe === "casquette" ? "Unique" : meilleureTaille(m, a).taille;
+    Object.keys(a.tailles).forEach(function(t){
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "sz"; b.textContent = t;
+      b.setAttribute("aria-pressed", S.taille[slot] === t ? "true":"false");
+      if(t === reco) b.dataset.reco = "1";
+      b.title = t === reco ? "Taille conseillée" : "";
+      b.addEventListener("click", function(){ S.taille[slot] = t; demander(); });
+      box.appendChild(b);
+    });
+    var mt = $("mt-"+a.id);
+    if(mt && a.coupe !== "casquette"){
+      var r = evaluer(m, a, S.taille[slot]);
+      mt.textContent = "Taille " + S.taille[slot] + " · " + (r.min > .85 ? "te va" : r.min > .55 ? "acceptable" : "mauvaise taille");
+    }
+  });
+  majMesures();
+}
+
+/* ---- Photo réelle → texture ------------------------------------------------
+   Détourage naïf par couleur de coin, recadrage sur le vêtement, remplissage
+   du carré de texture. En production : U²-Net pour le détourage et warp affine
+   par triangles vers l'atlas UV. Le principe, lui, est déjà le bon. ---------- */
+function chargerPhoto(e){
+  var f = e.target.files && e.target.files[0]; if(!f) return;
+  var rd = new FileReader();
+  rd.onload = function(){
+    var img = new Image();
+    img.onload = function(){
+      var N = 512, tmp = document.createElement("canvas");
+      var sc = Math.min(420/img.width, 420/img.height), W = Math.round(img.width*sc), Hh = Math.round(img.height*sc);
+      tmp.width = W; tmp.height = Hh;
+      var tx = tmp.getContext("2d"); tx.drawImage(img, 0, 0, W, Hh);
+      var d = tx.getImageData(0,0,W,Hh), p = d.data;
+      function px(x,y){ var i=(y*W+x)*4; return [p[i],p[i+1],p[i+2]]; }
+      var coins = [px(2,2), px(W-3,2), px(2,Hh-3), px(W-3,Hh-3)];
+      var bg = [0,1,2].map(function(c){ return coins.reduce(function(s,k){ return s+k[c]; },0)/4; });
+      var x0=W, y0=Hh, x1=0, y1=0, tol=58;
+      for(var y=0;y<Hh;y++) for(var x=0;x<W;x++){
+        var i=(y*W+x)*4;
+        var dd = Math.abs(p[i]-bg[0]) + Math.abs(p[i+1]-bg[1]) + Math.abs(p[i+2]-bg[2]);
+        if(dd > tol){ if(x<x0)x0=x; if(x>x1)x1=x; if(y<y0)y0=y; if(y>y1)y1=y; }
+      }
+      if(x1<=x0 || y1<=y0){ x0=0; y0=0; x1=W-1; y1=Hh-1; }
+      // On garde le cœur du vêtement : les bords portent les coutures et les ombres
+      var mx = (x1-x0)*0.18, my = (y1-y0)*0.18;
+      var cvv = document.createElement("canvas"); cvv.width = cvv.height = N;
+      cvv.getContext("2d").drawImage(tmp, x0+mx, y0+my, Math.max(8,(x1-x0)-2*mx), Math.max(8,(y1-y0)-2*my), 0, 0, N, N);
+      S.photo = cvv;
+      $("btn-photo-off").hidden = false;
+      demander();
+    };
+    img.src = rd.result;
+  };
+  rd.readAsDataURL(f);
+}
+
+/* ---- Rapport d'ajustement ---- */
+function majFit(){
+  var w = $("fitpanel"); if(!w) return;
+  var html = "";
+  [["haut","Haut"],["bas","Bas"]].forEach(function(sl){
+    var a = art(sl[0]); if(!a || a.coupe === "casquette") return;
+    var t = S.taille[sl[0]], r = evaluer(m, a, t), reco = meilleureTaille(m, a);
+    html += '<div><div class="slot-h">'+a.nom+' — taille '+t+'</div>';
+    if(reco.taille !== t) html += '<div class="callout" style="margin-bottom:9px">Le moteur conseille plutôt le <b>'+reco.taille+'</b>.</div>';
+    Object.keys(r.det).forEach(function(z){
+      var d = r.det[z], dom0 = d.lo - 12, dom1 = d.hi + 14;
+      var pin = Math.max(0, Math.min(1, (d.aisance - dom0)/(dom1 - dom0)));
+      var okL = Math.max(0, Math.min(1, (d.lo - dom0)/(dom1 - dom0)));
+      var okR = Math.max(0, Math.min(1, (d.hi - dom0)/(dom1 - dom0)));
+      var lib = d.etat === "t" ? "Serré" : d.etat === "l" ? "Ample" : "Bien";
+      html += '<div class="zone"><span class="zn">'+ZONES[z]+'</span>'
+        + '<span class="bar"><i class="ok" style="left:'+(okL*100)+'%;right:'+((1-okR)*100)+'%"></i>'
+        + '<i class="pin" data-s="'+d.etat+'" style="left:calc('+(pin*100)+'% - 1.5px)"></i></span>'
+        + '<span class="zv"><span class="tagline tg-'+d.etat+'">'+lib+'</span></span></div>';
+    });
+    html += '<div class="tblwrap"><table class="grid"><thead><tr><th>Taille</th><th>Poitrine</th><th>Aisance</th><th>Verdict</th></tr></thead><tbody>';
+    Object.keys(a.tailles).forEach(function(tt){
+      var rr = evaluer(m, a, tt), G = a.tailles[tt];
+      var mes = (a.coupe==="pantalon"||a.coupe==="jean") ? G.ceinture : G.poitrine;
+      var ais = (a.coupe==="pantalon"||a.coupe==="jean") ? rr.det[3].aisance : rr.det[2].aisance;
+      var v = rr.min > .85 ? "bien" : rr.min > .55 ? "passable" : "non";
+      html += '<tr'+(tt===reco.taille?' data-reco="1"':'')+'><td>'+tt+'</td><td>'+mes.toFixed(0)+'</td><td>'+sgn(ais)+'</td><td>'+v+'</td></tr>';
+    });
+    html += '</tbody></table></div></div>';
+  });
+  var aH = art("haut");
+  if(aH){
+    var mq = manquantes(aH);
+    html += '<div class="callout">' + (mq.length
+      ? 'Il manque <b>'+mq.map(function(k){return k.nom.toLowerCase()}).join(" et ")+'</b>. Chaque mesure réelle remplace une estimation et resserre la recommandation.'
+      : 'Toutes les mesures utiles sont réelles. C\'est le maximum de certitude que le moteur peut donner.') + '</div>';
+  }
+  w.innerHTML = html;
+}
+
+/* ---- Panier, remises, marchandage ---- */
+var STYLE_K = {dur:.68, normal:.50, souple:.34};
+function panier(){
+  var l = [];
+  ["haut","bas","casquette"].forEach(function(s){ var a = art(s); if(a) l.push(a); });
+  [].forEach.call(document.querySelectorAll('.item[data-slot="parfum"][aria-pressed="true"]'), function(b){
+    l.push(CAT.parfum.filter(function(a){return a.id===b.dataset.id})[0]);
+  });
+  return l;
+}
+function remises(l){
+  var r = [], ids = l.map(function(a){return a.coupe});
+  if(ids.indexOf("casquette") >= 0 && (ids.indexOf("chemise")>=0 || ids.indexOf("tshirt")>=0 || ids.indexOf("tunique")>=0))
+    r.push({nom:"Casquette avec un haut", val:-1000});
+  var haut = ids.some(function(c){return c==="chemise"||c==="tshirt"||c==="tunique"});
+  var bas  = ids.some(function(c){return c==="pantalon"||c==="jean"});
+  if(haut && bas) r.push({nom:"Ensemble haut + bas −8 %", val:-Math.round(l.reduce(function(s,a){return s+a.prix},0)*0.08/100)*100});
+  return r;
+}
+var LIVRAISONS = [
+  {id:"retrait",      nom:"Retrait à la boutique",            det:"Ouaga, av. Kwame Nkrumah",       prix:0},
+  {id:"ouaga-centre", nom:"Ouaga centre / Ouaga 2000",        det:"Essayage à la livraison, tu paies après", prix:1000},
+  {id:"ouaga-peri",   nom:"Ouaga périphérie",                 det:"Pissy, Tanghin, Dassasgho, Karpala",      prix:1500},
+  {id:"province",     nom:"Province par car",                 det:"Bobo, Koudougou, Ouahigouya — 24 à 48 h", prix:2500}
+];
+function fraisLivraison(){ return LIVRAISONS.filter(function(l){return l.id===S.livraison})[0].prix; }
+function totalAffiche(){
+  var l = panier(), s = l.reduce(function(a,x){return a+x.prix},0);
+  remises(l).forEach(function(r){ s += r.val; });
+  return s;
+}
+function plancherPanier(){ return panier().reduce(function(a,x){return a+x.plancher},0); }
+
+function majPrix(){
+  var l = panier(), sous = l.reduce(function(a,x){return a+x.prix},0), rs = remises(l);
+  var html = "";
+  l.forEach(function(a){ html += '<div class="rline"><span>'+a.nom+'</span><span>'+fmt(a.prix)+'</span></div>'; });
+  if(!l.length) html += '<div class="rline"><span class="note">Panier vide — choisis une tenue.</span><span></span></div>';
+  rs.forEach(function(r){ html += '<div class="rline disc"><span>'+r.nom+'</span><span>'+fmt(r.val)+'</span></div>'; });
+  var t = sous; rs.forEach(function(r){ t += r.val; });
+  if(S.prixNego != null) html += '<div class="rline disc"><span>Prix négocié</span><span>'+fmt(S.prixNego - t)+'</span></div>';
+  var liv = fraisLivraison();
+  html += '<div class="rline"><span>Livraison</span><span>'+(liv? fmt(liv) : "offerte")+'</span></div>';
+  html += '<div class="rline tot"><span>À payer</span><span>'+fmt((S.prixNego != null ? S.prixNego : t) + liv)+'</span></div>';
+  $("receipt").innerHTML = html;
+
+  var dv = $("delivery"); dv.innerHTML = "";
+  LIVRAISONS.forEach(function(o){
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "item";
+    b.setAttribute("aria-pressed", S.livraison === o.id ? "true":"false");
+    b.innerHTML = '<span class="sw" style="background:var(--indigo-soft);border-color:var(--line)"></span>'
+      + '<span><span class="nm">'+o.nom+'</span><span class="mt">'+o.det+'</span></span>'
+      + '<span class="pr">'+(o.prix? fmt(o.prix) : "0 F")+'</span>';
+    b.addEventListener("click", function(){ S.livraison = o.id; majPrix(); });
+    dv.appendChild(b);
+  });
+}
+function dire(qui, txt){
+  var d = document.createElement("div"); d.className = "bub " + qui; d.innerHTML = txt;
+  $("chatlog").appendChild(d); $("chatlog").scrollTop = 1e6;
+}
+function arrondi(n){ return Math.max(0, Math.round(n/500)*500); }
+function negocier(offre){
+  var t = totalAffiche(), pl = plancherPanier();
+  if(!panier().length){ dire("sys","Choisis d'abord une tenue."); return; }
+  var courant = S.prixNego != null ? S.prixNego : t;
+  dire("me", "Je te donne <b>"+fmt(offre)+"</b>");
+  S.tour++;
+  if(offre >= courant*0.97){
+    S.prixNego = offre; dire("shop","Ça marche. C'est à toi. 🤝"); majPrix(); return;
+  }
+  if(offre >= pl*1.02){
+    S.prixNego = offre;
+    dire("shop","Bon… pour toi je fais l'effort. <b>"+fmt(offre)+"</b>, on ne dit plus rien.");
+    majPrix(); return;
+  }
+  if(S.tour >= 3){
+    S.prixNego = pl;
+    dire("shop","Écoute, dernier prix : <b>"+fmt(pl)+"</b>. En dessous je travaille à perte, franchement.");
+    majPrix(); return;
+  }
+  var k = STYLE_K[S.style];
+  var contre = Math.max(pl, arrondi(offre + (courant - offre)*k));
+  S.prixNego = contre;
+  var phrases = [
+    "Ah non patron, à ce prix-là je perds. Je te fais <b>"+fmt(contre)+"</b>, c'est cadeau.",
+    "Tu me tues là 😅. <b>"+fmt(contre)+"</b> et tu repars avec.",
+    "C'est de la bonne qualité ça. <b>"+fmt(contre)+"</b>, je ne peux pas faire mieux pour l'instant."
+  ];
+  dire("shop", phrases[(S.tour-1) % phrases.length]);
+  majPrix();
+}
+
+/* ---- Branchements ---- */
+function demander(){ aRebatir = true; besoin = true; }
+var aRebatir = false;
+
+$("r-h").addEventListener("input", function(e){ S.h = +e.target.value; $("o-h").textContent = S.h+" cm"; demander(); });
+$("r-w").addEventListener("input", function(e){ S.w = +e.target.value; $("o-w").textContent = S.w+" kg"; demander(); });
+$("btn-reset-m").addEventListener("click", function(){ S.manuel = {}; demander(); });
+$("btn-tshirt").addEventListener("click", function(){ var h = $("tshirt-help"); h.hidden = !h.hidden; });
+
+[["mode-rendu","rendu"],["mode-fit","fit"],["mode-nu","nu"]].forEach(function(p){
+  $(p[0]).addEventListener("click", function(){
+    S.mode = p[1];
+    ["mode-rendu","mode-fit","mode-nu"].forEach(function(id){ $(id).setAttribute("aria-pressed", id===p[0]?"true":"false"); });
+    demander();
+  });
+});
+[["tab-morpho","p-morpho"],["tab-tenue","p-tenue"],["tab-fit","p-fit"],["tab-prix","p-prix"]].forEach(function(p){
+  $(p[0]).addEventListener("click", function(){
+    [["tab-morpho","p-morpho"],["tab-tenue","p-tenue"],["tab-fit","p-fit"],["tab-prix","p-prix"]].forEach(function(q){
+      $(q[0]).setAttribute("aria-selected", q[0]===p[0]?"true":"false");
+      $(q[1]).hidden = q[0] !== p[0];
+    });
+  });
+});
+[].forEach.call(document.querySelectorAll("[data-style]"), function(b){
+  b.addEventListener("click", function(){
+    S.style = b.dataset.style;
+    [].forEach.call(document.querySelectorAll("[data-style]"), function(x){ x.setAttribute("aria-pressed", x===b?"true":"false"); });
+  });
+});
+$("btn-offer").addEventListener("click", function(){
+  var v = parseInt(($("offer").value||"").replace(/[^0-9]/g,""), 10);
+  if(!isFinite(v) || v <= 0){ dire("sys","Écris un prix."); return; }
+  $("offer").value = ""; negocier(v);
+});
+$("offer").addEventListener("keydown", function(e){ if(e.key === "Enter") $("btn-offer").click(); });
+$("btn-last").addEventListener("click", function(){
+  if(!panier().length){ dire("sys","Choisis d'abord une tenue."); return; }
+  dire("me","C'est combien ton dernier prix ?");
+  S.tour = 3;
+  var pl = plancherPanier(); S.prixNego = pl;
+  dire("shop","Pour toi, <b>"+fmt(pl)+"</b>. Là c'est vraiment le dernier. 😌");
+  majPrix();
+});
+$("btn-wa").addEventListener("click", function(){
+  var t = (S.prixNego != null ? S.prixNego : totalAffiche()) + fraisLivraison();
+  dire("sys","→ Ouvre WhatsApp avec le panier et ta dernière offre ("+fmt(t)+") déjà écrits. Une partie des clients voudra toujours parler à un humain : l'app ne se met pas en travers.");
+});
+
+/* ---- Démarrage ---- */
+construireMesures();
+construireCatalogue();
+redim();
+chargerCorps().then(function(){
+  reconstruire();
+  besoin = true;
+}).catch(function(e){
+  $("v-sub").textContent = "Maillage introuvable";
+  $("v-conf-txt").textContent = "assets/mannequin.glb n'a pas pu être chargé : " + e.message;
+});
+dire("shop","Bienvenue ! Le prix affiché, c'est le prix. Mais tu peux toujours proposer, on est au Faso ici. 😄");
+
+(function boucle(){
+  requestAnimationFrame(boucle);
+  if(aRebatir){ aRebatir = false; reconstruire(); }
+  if(orb.auto && !reduit && performance.now() > orb.pause && !orb.drag){ orb.th += 0.0026; besoin = true; }
+  if(!besoin) return;
+  besoin = false;
+  placerCam();
+  ren.render(scene, camera);
+})();
+})();
+</script>
