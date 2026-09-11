@@ -550,8 +550,14 @@ function proAt(h){
 }
 
 function chargerCorps(){
+  // Le GLB voyage encapsulé en base64 dans du JSON : l'hébergement ne sert
+  // que des types web standard, et model/gltf-binary n'en fait pas partie.
   return Promise.all([
-    fetch("assets/mannequin.glb").then(function(r){ return r.arrayBuffer(); }),
+    fetch("assets/mannequin.json").then(function(r){ return r.json(); }).then(function(j){
+      var b = atob(j.glb), u = new Uint8Array(b.length);
+      for(var i=0;i<b.length;i++) u[i] = b.charCodeAt(i);
+      return u.buffer;
+    }),
     fetch("assets/profil.json").then(function(r){ return r.json(); })
   ]).then(function(res){
     PROFIL = res[1];
@@ -1697,7 +1703,7 @@ chargerCorps().then(function(){
   besoin = true;
 }).catch(function(e){
   $("v-sub").textContent = "Maillage introuvable";
-  $("v-conf-txt").textContent = "assets/mannequin.glb n'a pas pu être chargé : " + e.message;
+  $("v-conf-txt").textContent = "assets/mannequin.json n'a pas pu être chargé : " + e.message;
 });
 dire("shop","Bienvenue ! Le prix affiché, c'est le prix. Mais tu peux toujours proposer, on est au Faso ici. 😄");
 
