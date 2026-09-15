@@ -3,56 +3,67 @@
 Application d'essayage 3D pour une boutique de vêtements homme à Ouagadougou.
 
 Le client compose une tenue à partir du stock réel du commerçant et la voit
-portée sur un mannequin à **sa** morphologie. Deux problèmes de terrain sont
-traités au passage : personne ne connaît sa taille, et on négocie le prix.
+portée sur un mannequin photoréaliste. Il ne donne **ni son poids, ni sa
+taille** : juste ce qu'il porte d'habitude. Deux problèmes de terrain sont
+traités au passage — un L n'est pas le même L d'une boutique à l'autre, et on
+négocie le prix.
 
 ## État
 
 | | |
 |---|---|
 | `prototype/mannequin-3d/` | Maquette jouable. Ouvrir `index.html` via un serveur HTTP (elle charge des fichiers). |
-| `prototype/mannequin-3d/assets/` | Maillage du mannequin + profil anthropométrique. Voir `SOURCE.md` pour la licence. |
-| `tools/` | Chaîne de préparation du maillage (Python + numpy). |
+| `prototype/mannequin-3d/assets/` | Mannequin et peau. Licences et provenance dans `SOURCE.md`. |
+| `tools/` | Chaîne de préparation du mannequin (Python + numpy + Pillow). |
 
 L'application (PWA + APK) n'est pas encore écrite ; la maquette sert à valider
 le moteur avant d'investir dedans.
 
-## Ce que fait la maquette
+## Les partis pris
 
-**Le corps.** Un vrai maillage anatomique (13 380 sommets, base MakeHuman, CC0)
-déformé sommet par sommet pour atteindre les mesures du client. Les membres
-bougent autour de leur propre axe anatomique, jamais autour de l'axe du corps.
-Le ventre pousse vers l'avant plus que sur les côtés, à tour de taille égal.
+**Un seul mannequin, fixe.** Photoréaliste, 1,81 m, tour de poitrine 100 cm —
+il porte du L. Maillage anatomique de 14 517 sommets et peau photographique,
+tous deux issus de MakeHuman sous licence CC0. La morphologie vient de la
+cible officielle `african-male-young` : un vrai morph d'auteur, pas une
+déformation devinée. Détail des licences et des mensurations dans
+`prototype/mannequin-3d/assets/SOURCE.md`.
 
-**Les mesures.** Taille et poids suffisent à estimer les 8 mesures utiles. Chaque
-mesure réelle saisie remplace une estimation et fait monter la confiance
-affichée. Les régressions sont génériques et devront être recalées sur des
-clients réellement mesurés en boutique — c'est le seul vrai fossé concurrentiel
-du projet.
+**Le client dit juste sa taille habituelle.** Pas de formulaire, pas de
+mètre-ruban. L'app compare les mesures réelles de l'article à ce qu'une taille
+veut dire en général, et corrige : « ce L taille petit de 4 cm, prends le XL ».
+Un article en M sera visiblement juste sur le mannequin, un XL visiblement
+ample — c'est la même information, montrée au lieu d'être expliquée.
 
-**Les vêtements.** Bâtis sur le profil du corps déformé, dilatés par l'aisance
-réelle de la taille choisie. La recommandation de taille vient de la comparaison
-`mesures du vêtement à plat × mesures du corps`, zone par zone, avec un verdict
-serré / bien / ample par zone.
+**Le commerçant relève 4 mesures par article.** Le vêtement posé à plat,
+largeur fois deux. 90 secondes. Sans ces chiffres, aucun conseil de taille
+n'est possible et on retombe sur « ça ne me va pas » après livraison, ce qui
+coûte cher ici.
 
-**Le marchandage.** Le commerçant règle un prix plancher que le client ne voit
-jamais, et une humeur. L'app négocie à sa place. Trois tours, puis dernier prix.
-Un bouton bascule sur WhatsApp pour ceux qui veulent parler à un humain.
+**Les photos sont les siennes.** Chaque article porte la vraie photo prise au
+téléphone. Elle sert de vignette dans le rayon *et* de tissu sur le mannequin.
+Le bouton « Photo du patron » dans la maquette fait la chaîne en miniature :
+détourage par couleur de coin, recadrage sur le vêtement, application.
+
+**Le marchandage reste un marchandage.** Le commerçant règle un prix plancher
+que le client ne voit jamais, plus une humeur. L'app négocie à sa place,
+24 h/24. Trois tours, puis dernier prix. Un bouton bascule sur WhatsApp pour
+ceux qui veulent parler à un humain.
 
 ## Régénérer les assets
 
 ```bash
-pip install numpy
+pip install numpy pillow
 curl -o base.obj https://raw.githubusercontent.com/makehumancommunity/makehuman/master/makehuman/data/3dobjs/base.obj
-python3 tools/conv.py      # base.obj    -> mannequin.glb + squelette.json
-python3 tools/profil.py    # mannequin.glb -> profil.json (mensurations par tranche)
-python3 tools/masc.py      # morph masculin, puis relancer profil.py
+curl -o skins02.zip https://files2.makehumancommunity.org/asset_packs/skins02/skins02_cc0.zip
+python3 tools/conv.py     # base.obj + morph -> mannequin.glb + squelette.json
+python3 tools/profil.py   # mannequin.glb -> profil.json (mensurations par tranche)
+python3 tools/tex.py      # peaux PNG -> WebP recalés
 ```
 
 ## Limites connues
 
-- La base MakeHuman est androgyne et penche encore féminin malgré le morph
-  d'aplatissement du buste. Il faut une vraie cible de morphologie masculine.
-- L'empiècement d'épaule des hauts laisse une arête visible sur le deltoïde.
-- Le haut de cuisse traverse encore le pantalon par endroits.
-- Stock, textures et prix sont simulés.
+- L'empiècement d'épaule des hauts laisse une légère arête au deltoïde.
+- Les vêtements sont des surfaces décalées du corps, pas du tissu simulé :
+  la tombée est plausible mais il n'y a ni plis ni poids de tissu.
+- Un seul gabarit de corps. Un client costaud ne se projette pas complètement.
+- Stock et prix simulés ; les photos du patron se chargent à la main.

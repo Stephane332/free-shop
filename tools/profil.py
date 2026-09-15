@@ -1,15 +1,9 @@
 import json, numpy as np, struct
 
-# --- relecture du GLB qu'on vient d'écrire --------------------------------
-raw = open("mannequin.glb","rb").read()
-jlen = struct.unpack("<I", raw[12:16])[0]
-gl = json.loads(raw[20:20+jlen].decode())
-binoff = 20 + jlen + 8
-acc, bv = gl["accessors"], gl["bufferViews"]
-P = np.frombuffer(raw, dtype=np.float32, count=acc[0]["count"]*3,
-                  offset=binoff+bv[0]["byteOffset"]).reshape(-1,3).astype(np.float64)
-I = np.frombuffer(raw, dtype=np.uint16, count=acc[1]["count"],
-                  offset=binoff+bv[1]["byteOffset"]).astype(np.int64).reshape(-1,3)
+# --- relecture du GLB -----------------------------------------------------
+import glb
+_d = glb.lire("mannequin.glb")
+P, I = _d["P"], _d["I"]
 sk = json.load(open("squelette.json"))
 J  = {k:np.array(v) for k,v in sk["articulations"].items()}
 H0 = sk["hauteur"]
